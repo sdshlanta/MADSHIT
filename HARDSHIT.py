@@ -20,10 +20,10 @@ def main():
 	def shitInterrupt(channel):
 		timeOfSHIT = datetime.now()
 		insertionQuery = "INSERT INTO ashit (shit_type, shit_time, shit_length) VALUES (%d, %s, %d)"
-		data = (channelMap[channel], timeOfSHIT, args.l)
-		dbConn = mysql.connector.connect(user=args.U, password=args.P,
-									host=args.H,
-									database=args.N)
+		data = (channelMap[channel], timeOfSHIT, args.testAlertLength)
+		dbConn = mysql.connector.connect(user=args.databaseUsername, password=args.databasePassword,
+									host=args.databaseHost,
+									database=args.databaseName)
 		cur = dbConn.cursor()
 		cur.execute(insertionQuery, data)
 		cur.close()
