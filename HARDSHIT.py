@@ -17,14 +17,15 @@ channelMap = {
 
 def main():
 	def shitInterrupt(channel):
-		timeOfSHIT = datetime.now()		
+		timeOfSHIT = datetime.now()
+		insertionQuery = "INSERT INTO ashit (shit_type, shit_time, shit_length) VALUES (%d, %s, %d)"
+		data = (channelMap[channel], timeOfSHIT, args.l)
 		dbConn = mysql.connector.connect(user=args.U, password=args.P,
 									host=args.H,
 									database=args.N)
 		cur = dbConn.cursor()
-		insertionQuery = "INSERT INTO ashit (shit_type, shit_time, shit_length) VALUES (%d, %s, %d)"
-		data = (channelMap[channel], timeOfSHIT, args.l)
 		cur.execute(insertionQuery, data)
+		cur.close()
 		dbConn.close()
 	GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 	GPIO.add_event_detect(2, GPIO.RISING, callback=shitInterrupt)
