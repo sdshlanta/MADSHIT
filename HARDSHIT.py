@@ -2,6 +2,7 @@ import sqlite3
 import RPi.GPIO as GPIO
 import argparse
 import mysql.connector
+import time
 from datetime import datetime
 
 
