@@ -41,7 +41,7 @@ if __name__ == '__main__':
 	parser.add_argument("-N", "--databaseName", type=str, help="Name of the database used by the SHIT. Default is 'doshit'.", default="doshit")
 	parser.add_argument("-H", "--databaseHost", type=str, help="The host the database is running on.  Default is 127.0.0.1", default="127.0.0.1")
 	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is root", default="root")
-	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is Password1!", default="Password1!")
+	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is Password1!", default="")
 	parser.add_argument("-l", "--testAlertLength", type=int, help="The amount of time a test alert should last", default=5)
 	args = parser.parse_args()
 	main()
