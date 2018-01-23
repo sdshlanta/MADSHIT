@@ -25,6 +25,7 @@ def main():
 									host=args.databaseHost,
 									database=args.databaseName)
 		cur = dbConn.cursor()
+		print(insertionQuery % data)
 		cur.execute(insertionQuery % data)
 		cur.close()
 		dbConn.close()
