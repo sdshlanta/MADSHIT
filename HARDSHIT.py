@@ -18,9 +18,8 @@ channelMap = {
 
 def main():
 	def shitInterrupt(channel):
-		timeOfSHIT = datetime.now()
-		insertionQuery = "INSERT INTO ashit (shit_type, shit_time, shit_length) VALUES (%d, %s, %d)"
-		data = (channelMap[channel], timeOfSHIT, args.testAlertLength)
+		insertionQuery = "INSERT INTO ashit (shit_type, shit_length) VALUES (%d, %d)"
+		data = (channelMap[channel], args.testAlertLength)
 		dbConn = mysql.connector.connect(user=args.databaseUsername, password=args.databasePassword,
 									host=args.databaseHost,
 									database=args.databaseName)
