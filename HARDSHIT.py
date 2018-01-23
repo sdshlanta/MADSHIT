@@ -26,7 +26,7 @@ def main():
 		cur = dbConn.cursor()
 		print(insertionQuery % data)
 		cur.execute(insertionQuery % data)
-		cur.commit()
+		dbConn.commit()
 		print(cur.lastrowid)
 		cur.execute('SELECT * FROM ashit')
 		for row in cur:
