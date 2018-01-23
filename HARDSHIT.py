@@ -1,10 +1,8 @@
-import sqlite3
 import RPi.GPIO as GPIO
 import argparse
 import mysql.connector
 import time
 import threading
-from datetime import datetime
 
 aCurrentSHIT = None
 GPIO.setmode(GPIO.BOARD)
@@ -84,6 +82,7 @@ def main():
 			dbConn.close()
 		except:
 			pass
+	finally:
 		GPIO.cleanup()
 
 if __name__ == '__main__':
