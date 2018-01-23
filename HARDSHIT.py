@@ -25,7 +25,7 @@ def main():
 									host=args.databaseHost,
 									database=args.databaseName)
 		cur = dbConn.cursor()
-		cur.execute(insertionQuery, data)
+		cur.execute(insertionQuery % data)
 		cur.close()
 		dbConn.close()
 	GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
