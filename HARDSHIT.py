@@ -26,10 +26,12 @@ def main():
 		cur = dbConn.cursor()
 		print(insertionQuery % data)
 		cur.execute(insertionQuery % data)
+		cur.commit()
 		print(cur.lastrowid)
 		cur.execute('SELECT * FROM ashit')
 		for row in cur:
 			print(row)
+		
 		cur.close()
 		dbConn.close()
 	GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
