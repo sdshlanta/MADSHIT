@@ -18,7 +18,7 @@ channelMap = {
 
 def main():
 	def shitInterrupt(channel):
-		insertionQuery = "INSERT INTO ashit (shit_type, shit_length) VALUES (%d, %d)"
+		insertionQuery = "INSERT INTO ashit (shit_type, shit_length) VALUES (%d, %d);"
 		data = (channelMap[channel], args.testAlertLength)
 		dbConn = mysql.connector.connect(user=args.databaseUsername, password=args.databasePassword,
 									host=args.databaseHost,
@@ -27,6 +27,8 @@ def main():
 		print(insertionQuery % data)
 		cur.execute(insertionQuery % data)
 		print(cur.lastrowid)
+		for row in cur.execute('SELECT * FROM ashit;'):
+			print(row)
 		cur.close()
 		dbConn.close()
 	GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
