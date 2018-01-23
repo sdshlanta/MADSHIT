@@ -26,6 +26,7 @@ def main():
 		cur = dbConn.cursor()
 		print(insertionQuery % data)
 		cur.execute(insertionQuery % data)
+		print(cur.lastrowid)
 		cur.close()
 		dbConn.close()
 	GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
