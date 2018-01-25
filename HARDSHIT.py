@@ -53,7 +53,7 @@ def main():
 	GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 	GPIO.setup([2, 3], GPIO.OUT)
 
-	for pin in map(int, aSHITType.keys():
+	for pin in map(int, aSHITType.keys()):
 		GPIO.add_event_detect(pin, GPIO.RISING, callback=shitInterrupt)
 	
 	try:
