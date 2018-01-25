@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import argparse
-import mysql.connector
+import SHITDB
 import time
 import threading
 import json
@@ -24,25 +24,10 @@ def main():
 	aCurrentSHIT = threading.Timer(0, stopASHIT)
 	latestSHITNo = args.lastAlarmNumber
 
+	db = SHITDB.SHITdb(args.host, args.database, args.username, args.username)
+
 	def shitInterrupt(channel):
-		
-		insertionQuery = "INSERT INTO ashit (shit_type, shit_length) VALUES (%s, %d)"
-		data = (aSHITType[str(channel)], args.testAlertLength)
-		dbConn = mysql.connector.connect(user=args.databaseUsername, password=args.databasePassword,
-											host=args.databaseHost,
-											database=args.databaseName)
-		cur = dbConn.cursor()
-		print(insertionQuery % data)
-		cur.execute(insertionQuery % data)
-		dbConn.commit()
-		
-		print(cur.lastrowid)
-		cur.execute('SELECT * FROM ashit ORDER BY shit_time DESC LIMIT 1')
-		for row in cur:
-			print(row)
-		
-		cur.close()
-		dbConn.close()
+		db.insertASHIT(aSHITType[str(channel)], args.testAlertLength)
 	
 	GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 	GPIO.setup([2, 3], GPIO.OUT)
@@ -52,12 +37,7 @@ def main():
 	
 	try:
 		while True:
-			dbConn = mysql.connector.connect(user=args.databaseUsername, password=args.databasePassword,
-											host=args.databaseHost,
-											database=args.databaseName)
-			cur = dbConn.cursor()
-			cur.execute("SELECT shit_no, shit_length, shit_type FROM ashit ORDER BY shit_time DESC LIMIT 1")
-			for shit_no, shit_length, shit_type in cur:
+			for shit_no, shit_length, shit_type in db.selectMostRecentASHIT():
 				if shit_no > latestSHITNo:
 					print(shit_no, shit_length, shit_type)
 					if shit_type == 5:
