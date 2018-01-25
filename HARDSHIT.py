@@ -76,6 +76,8 @@ def main():
 						aCurrentSHIT.start()
 			
 			print(aCurrentSHIT)
+			import code
+			code.interact(local=locals())
 			cur.close()
 			dbConn.close()
 			time.sleep(1)
