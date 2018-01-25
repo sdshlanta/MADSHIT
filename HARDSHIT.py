@@ -7,7 +7,6 @@ import json
 
 GPIO.setmode(GPIO.BCM)
 
-aCurrentSHIT = None
 aSHITType = {}
 
 def startASHIT():
@@ -16,14 +15,13 @@ def startASHIT():
 	GPIO.output(3, GPIO.HIGH)
 
 def stopASHIT():
-	global aCurrentShit
 	print("Disabled alarm")
 	GPIO.output(2, GPIO.LOW)
 	GPIO.output(3, GPIO.LOW)
-	aCurrentSHIT = None
-
+=
 def main():
 
+	aCurrentSHIT = threading.Timer(0, stopASHIT)
 	latestSHITNo = args.lastAlarmNumber
 
 	def shitInterrupt(channel):
@@ -68,16 +66,14 @@ def main():
 							stopASHIT()
 							latestSHITNo = shit_no
 
-					elif aCurrentSHIT is None:
-						latestSHITNo = shit_no
+					elif not aCurrentSHIT.is_alive():
 						startASHIT()
-						global aCurrentSHIT
 						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT)
 						aCurrentSHIT.start()
+						latestSHITNo = shit_no
+
 			
 			print(aCurrentSHIT)
-			import code
-			code.interact(local=locals())
 			cur.close()
 			dbConn.close()
 			time.sleep(1)
