@@ -24,7 +24,8 @@ def main():
 	aCurrentSHIT = threading.Timer(0, stopASHIT)
 	latestSHITNo = args.lastAlarmNumber
 
-	db = SHITDB.SHITdb(args.host, args.database, args.username, args.username)
+	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, 
+					   args.databasePassword)
 
 	def shitInterrupt(channel):
 		db.insertASHIT(aSHITType[str(channel)], args.testAlertLength)

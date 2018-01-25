@@ -16,4 +16,4 @@ CREATE TABLE users (
 	user_type int(1) NOT NULL
 );
 
-INSERT INTO users (user_name, user_passwd, user_type) VALUES ('admin', 'password', 1)
+INSERT INTO users (user_name, user_passwd, user_type) VALUES ('admin', 'password', 1);

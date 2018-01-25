@@ -8,9 +8,9 @@ class SHITdb(object):
 		self.password = password
 	
 	def _getDatabaseConnection():
-		dbConn = mysql.connector.connect(user=self.databaseUsername, password=self.databasePassword,
-										host=self.databaseHost,
-										database=self.databaseName)
+		dbConn = mysql.connector.connect(user=self.username, password=self.password,
+										host=self.host,
+										database=self.name)
 		return dbConn
 
 	def insertASHIT(self, shit_type, shit_length, debug = False):
