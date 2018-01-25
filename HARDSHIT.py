@@ -68,6 +68,7 @@ def main():
 					elif aCurrentSHIT is None:
 						startASHIT()
 						aCurrentSHIT = threading.Timer(shit_length, stopASHIT)
+						print(aCurrentSHIT)
 			cur.close()
 			dbConn.close()
 			time.sleep(1)
