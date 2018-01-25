@@ -24,9 +24,6 @@ def stopASHIT():
 
 def main():
 
-	global aCurrentShit
-	print(aCurrentSHIT)
-
 	latestSHITNo = args.lastAlarmNumber
 
 	def shitInterrupt(channel):
@@ -74,6 +71,7 @@ def main():
 					elif aCurrentSHIT is None:
 						latestSHITNo = shit_no
 						startASHIT()
+						global aCurrentSHIT
 						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT)
 						aCurrentSHIT.start()
 			
