@@ -6,7 +6,7 @@ import threading
 import json
 
 aCurrentSHIT = None
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 
 aSHITType = {}
 
@@ -40,13 +40,11 @@ def main():
 		cur.close()
 		dbConn.close()
 	
-	GPIO.setup([5, 6, 13, 16], GPIO.IN, pull_up_down=GPIO.PUD_UP)
-	GPIO.setup([3, 4], GPIO.OUT)
+	GPIO.setup(map(int, aSHITType.keys()) GPIO.IN, pull_up_down=GPIO.PUD_UP)
+	GPIO.setup([3, 5], GPIO.OUT)
 
-	GPIO.add_event_detect(5, GPIO.RISING, callback=shitInterrupt)
-	GPIO.add_event_detect(6, GPIO.RISING, callback=shitInterrupt)
-	GPIO.add_event_detect(13, GPIO.RISING, callback=shitInterrupt)
-	GPIO.add_event_detect(16, GPIO.RISING, callback=shitInterrupt)
+	for pin in aSHITType.keys():
+		GPIO.add_event_detect(int(pin), GPIO.RISING, callback=shitInterrupt)
 	
 	try:
 		while True:
