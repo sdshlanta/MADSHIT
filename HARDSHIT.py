@@ -58,7 +58,7 @@ def main():
 			for shit_no, shit_length, shit_type in cur:
 				if shit_no > latestSHITNo:
 					latestSHITNo = shit_no
-					if shit_type == 5
+					if shit_type == 5:
 						if aCurrentSHIT is not None:
 							aCurrentSHIT.cancel()
 							stopASHIT()
