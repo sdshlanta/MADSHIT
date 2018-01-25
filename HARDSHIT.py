@@ -36,7 +36,7 @@ def main():
 		cur.execute(insertionQuery % data)
 		dbConn.commit()
 		print(cur.lastrowid)
-		cur.execute('SELECT * FROM ashit')
+		cur.execute('SELECT * FROM ashit ORDER BY shit_time DESC LIMIT 1')
 		for row in cur:
 			print(row)
 		
