@@ -7,7 +7,7 @@ class SHITdb(object):
 		self.username = username
 		self.password = password
 	
-	def _getDatabaseConnection():
+	def _getDatabaseConnection(self):
 		dbConn = mysql.connector.connect(user=self.username, password=self.password,
 										host=self.host,
 										database=self.name)
