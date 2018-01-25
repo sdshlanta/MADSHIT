@@ -5,7 +5,6 @@ import time
 import threading
 import json
 
-aCurrentSHIT = None
 GPIO.setmode(GPIO.BCM)
 
 aSHITType = {}
@@ -19,15 +18,19 @@ def stopASHIT():
 	print("Disabled alarm")
 	GPIO.output(2, GPIO.LOW)
 	GPIO.output(3, GPIO.LOW)
-	aCurrentSHIT = None
 
 def main():
+	aCurrentSHIT = None
+
 	latestSHITNo = args.lastAlarmNumber
 
 	def shitInterrupt(channel):
+		
 		insertionQuery = "INSERT INTO ashit (shit_type, shit_length) VALUES (%s, %d)"
 		data = (aSHITType[str(channel)], args.testAlertLength)
-		
+		dbConn = mysql.connector.connect(user=args.databaseUsername, password=args.databasePassword,
+											host=args.databaseHost,
+											database=args.databaseName)
 		cur = dbConn.cursor()
 		# print(insertionQuery % data)
 		cur.execute(insertionQuery % data)
@@ -61,6 +64,7 @@ def main():
 						if aCurrentSHIT is not None:
 							aCurrentSHIT.cancel()
 							stopASHIT()
+							aCurrentSHIT = None
 					elif aCurrentSHIT is None:
 						startASHIT()
 						aCurrentSHIT = threading.Timer(shit_length, stopASHIT)
