@@ -22,7 +22,6 @@ def stopASHIT():
 	GPIO.output(3, GPIO.LOW)
 	aCurrentSHIT = None
 
-
 def main():
 
 	global aCurrentShit
@@ -42,6 +41,7 @@ def main():
 		print(insertionQuery % data)
 		cur.execute(insertionQuery % data)
 		dbConn.commit()
+		
 		print(cur.lastrowid)
 		cur.execute('SELECT * FROM ashit ORDER BY shit_time DESC LIMIT 1')
 		for row in cur:
@@ -50,10 +50,10 @@ def main():
 		cur.close()
 		dbConn.close()
 	
-	GPIO.setup([int(pin) for pin in aSHITType.keys()], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+	GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 	GPIO.setup([2, 3], GPIO.OUT)
 
-	for pin in [int(pin) for pin in aSHITType.keys()]:
+	for pin in map(int, aSHITType.keys():
 		GPIO.add_event_detect(pin, GPIO.RISING, callback=shitInterrupt)
 	
 	try:
@@ -82,6 +82,7 @@ def main():
 			cur.close()
 			dbConn.close()
 			time.sleep(1)
+
 	except KeyboardInterrupt:
 		try:
 			cur.close()
