@@ -55,19 +55,10 @@ def main():
 
 			
 			print(aCurrentSHIT)
-			cur.close()
-			dbConn.close()
 			time.sleep(1)
 
 	except KeyboardInterrupt:
-		try:
-			cur.close()
-		except:
-			pass
-		try:
-			dbConn.close()
-		except:
-			pass
+		pass
 	finally:
 		GPIO.cleanup()
 
