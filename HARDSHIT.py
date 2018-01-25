@@ -3,35 +3,30 @@ import argparse
 import mysql.connector
 import time
 import threading
+import json
 
 aCurrentSHIT = None
 GPIO.setmode(GPIO.BOARD)
 
-aSHITType = {
-	5:1,
-	6:2,
-	13:3,
-	19:4
-}
+aSHITType = {}
 
-def enableAlarm():
+def startASHIT():
 	print("Enabled alarm")
 	GPIO.output(2, GPIO.HIGH)
 	GPIO.output(3, GPIO.HIGH)
 
-def disableAlarm():
+def stopASHIT():
 	print("Disabled alarm")
-	GPIO.output(2, GPIO.HIGH)
-	GPIO.output(3, GPIO.HIGH)
+	GPIO.output(2, GPIO.LOW)
+	GPIO.output(3, GPIO.LOW)
 	aCurrentSHIT = None
-
 
 def main():
 	latestSHITNo = args.lastAlarmNumber
 
 	def shitInterrupt(channel):
-		insertionQuery = "INSERT INTO ashit (shit_type, shit_length) VALUES (%d, %d)"
-		data = (aSHITType[channel], args.testAlertLength)
+		insertionQuery = "INSERT INTO ashit (shit_type, shit_length) VALUES (%s, %d)"
+		data = (aSHITType[str(channel)], args.testAlertLength)
 		
 		cur = dbConn.cursor()
 		# print(insertionQuery % data)
@@ -66,10 +61,10 @@ def main():
 					if shit_type == 5
 						if aCurrentSHIT is not None:
 							aCurrentSHIT.cancel()
-							disableAlarm()
+							stopASHIT()
 					elif aCurrentSHIT is None:
-						enableAlarm()
-						aCurrentSHIT = threading.Timer(shit_length, disableAlarm)
+						startASHIT()
+						aCurrentSHIT = threading.Timer(shit_length, stopASHIT)
 			cur.close()
 			dbConn.close()
 			time.sleep(1)
@@ -93,5 +88,7 @@ if __name__ == '__main__':
 	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="")
 	parser.add_argument("-l", "--testAlertLength", type=int, help="The amount of time a test alert should last", default=5)
 	parser.add_argument("-a", "--lastAlarmNumber", type=int, help="The set the inital value for the last alarm", default = -1)
+	parser.add_argument('-p', '--pinMap', type=lambda x: json.load(open(x)), help="Specifiy the pin mapping file for pin to alarm mapping. Default filename is pinMap.json", default=json.load(open('pinMap.json')))
 	args = parser.parse_args()
+	aSHITType = args.pinMap
 	main()
