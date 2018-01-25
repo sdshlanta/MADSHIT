@@ -26,7 +26,9 @@ def stopASHIT():
 def main():
 
 	global aCurrentShit
+	aCurrentSHIT = None
 	latestSHITNo = args.lastAlarmNumber
+	print(aCurrentSHIT)
 
 	def shitInterrupt(channel):
 		
