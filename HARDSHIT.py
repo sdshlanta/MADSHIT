@@ -11,12 +11,12 @@ aSHITType = {}
 
 def startASHIT():
 	print("Enabled alarm")
-	GPIO.output(5, GPIO.HIGH)
+	GPIO.output(2, GPIO.HIGH)
 	GPIO.output(3, GPIO.HIGH)
 
 def stopASHIT():
 	print("Disabled alarm")
-	GPIO.output(5, GPIO.LOW)
+	GPIO.output(2, GPIO.LOW)
 	GPIO.output(3, GPIO.LOW)
 
 def main():
@@ -43,11 +43,11 @@ def main():
 		cur.close()
 		dbConn.close()
 	
-	GPIO.setup(map(int, aSHITType.keys()), GPIO.IN, pull_up_down=GPIO.PUD_UP)
-	GPIO.setup([3, 5], GPIO.OUT)
+	GPIO.setup([int(pin) for pin in aSHITType.keys()], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+	GPIO.setup([2, 3], GPIO.OUT)
 
-	for pin in aSHITType.keys():
-		GPIO.add_event_detect(int(pin), GPIO.RISING, callback=shitInterrupt)
+	for pin in [int(pin) for pin in aSHITType.keys()]:
+		GPIO.add_event_detect(pin, GPIO.RISING, callback=shitInterrupt)
 	
 	try:
 		while True:
