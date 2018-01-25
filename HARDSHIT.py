@@ -27,7 +27,6 @@ def main():
 	global aCurrentShit
 	print(aCurrentSHIT)
 
-	aCurrentSHIT = None
 	latestSHITNo = args.lastAlarmNumber
 
 	def shitInterrupt(channel):
