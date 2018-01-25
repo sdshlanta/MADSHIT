@@ -32,13 +32,13 @@ def main():
 											host=args.databaseHost,
 											database=args.databaseName)
 		cur = dbConn.cursor()
-		# print(insertionQuery % data)
+		print(insertionQuery % data)
 		cur.execute(insertionQuery % data)
 		dbConn.commit()
-		# print(cur.lastrowid)
-		# cur.execute('SELECT * FROM ashit')
-		# for row in cur:
-		# 	print(row)
+		print(cur.lastrowid)
+		cur.execute('SELECT * FROM ashit')
+		for row in cur:
+			print(row)
 		
 		cur.close()
 		dbConn.close()
