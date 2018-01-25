@@ -26,9 +26,10 @@ def stopASHIT():
 def main():
 
 	global aCurrentShit
+	print(aCurrentSHIT)
+
 	aCurrentSHIT = None
 	latestSHITNo = args.lastAlarmNumber
-	print(aCurrentSHIT)
 
 	def shitInterrupt(channel):
 		
@@ -74,7 +75,9 @@ def main():
 					elif aCurrentSHIT is None:
 						latestSHITNo = shit_no
 						startASHIT()
-						aCurrentSHIT = threading.Timer(shit_length, stopASHIT)
+						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT)
+						aCurrentSHIT.start()
+			
 			print(aCurrentSHIT)
 			cur.close()
 			dbConn.close()
