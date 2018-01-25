@@ -18,7 +18,7 @@ def stopASHIT():
 	print("Disabled alarm")
 	GPIO.output(2, GPIO.LOW)
 	GPIO.output(3, GPIO.LOW)
-=
+
 def main():
 
 	aCurrentSHIT = threading.Timer(0, stopASHIT)
