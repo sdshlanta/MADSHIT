@@ -54,6 +54,7 @@ def main():
 			cur = dbConn.cursor()
 			cur.execute("SELECT shit_no, shit_length, shit_type FROM ashit ORDER BY shit_time DESC LIMIT 1")
 			for shit_no, shit_length, shit_type in cur:
+				print(shit_no, shit_length, shit_type)
 				if shit_no > latestSHITNo:
 					latestSHITNo = shit_no
 					if shit_type == 5:
