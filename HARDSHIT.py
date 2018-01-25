@@ -40,7 +40,7 @@ def main():
 		cur.close()
 		dbConn.close()
 	
-	GPIO.setup(map(int, aSHITType.keys()) GPIO.IN, pull_up_down=GPIO.PUD_UP)
+	GPIO.setup(map(int, aSHITType.keys()), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 	GPIO.setup([3, 5], GPIO.OUT)
 
 	for pin in aSHITType.keys():
