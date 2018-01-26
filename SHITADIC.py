@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Request, Session
+from flask import Flask, render_template, session, session
 import SHITDB
 import argparse
 
@@ -7,14 +7,14 @@ app = Flask("Alternitive Data Interface Connector")
 @app.route('/',methods=['GET', 'POST'])
 def index():
 	error = None
-	if Request.method == 'POST':
-		if db.checkLogin(Request.form['username'], Request.form['password']):
+	if request.method == 'POST':
+		if db.checkLogin(request.form['username'], request.form['password']):
 			Session['username']
 		else:
 			error = 'Incorrect username or password.'
 	else:
 		if 'username' in Session:
-			username = Session['username']
+			username = session['username']
 		else:
 			username = None
 		return render_template('index.html', name=username, error=error)
