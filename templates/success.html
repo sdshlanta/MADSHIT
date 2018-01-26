@@ -1,9 +1,9 @@
 {% extends "header.html" %}
 {{super()}}
-{% block title %}Error{% endblock %}
+{% block title %}Success{% endblock %}
 {% block content %}
 	<p>
-		Error: {{ error }}
+		{{ success }}
 
 		<a href="{{ returnURL }}">Return to previous page</a>
 	</p>

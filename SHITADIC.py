@@ -4,6 +4,16 @@ import argparse
 
 app = Flask("Alternitive Data Interface Connector")
 
+def constructError(error, returnLocation):
+	session['error'] = error
+	session['returnURL'] = url_for(returnLocation)
+	return redirect(url_for('error'))
+
+def constructSuccess(success, returnLocation):
+	session['success'] = success
+	session['returnURL'] = url_for(returnLocation)
+	return redirect(url_for('success'))
+
 @app.route('/',methods=['GET', 'POST'])
 def index():
 	if request.method == 'POST':
@@ -18,7 +28,6 @@ def index():
 			session['error'] = 'Incorrect username or password.'
 			session['returnURL'] = url_for('index')
 			return redirect(url_for('error'))
-			
 	else:
 		if 'username' in session:
 			session['logged_in'] = True
@@ -43,11 +52,27 @@ def error():
 	returnURL = session['returnURL']
 	del session['error']
 	del session['returnURL']
-	return render_template('error.html', error, returnURL)
+	return render_template('error.html', error=error, returnURL=returnURL)
+
+@app.route('/success', methods=['GET'])
+def success():
+	success = session['success']
+	returnURL = session['returnURL']
+	del session['success']
+	del session['returnURL']
+	return render_template('success.html', success=success, returnURL=returnURL)
 
 @app.route('/api/addUser', methods = ['POST'])
 def addUser():
-	pass
+	if len(request.form['password']) != 8:
+		return constructError('Password must be EXACTLY 8 chars.', 'renderAddUser')
+	elif not db.checkForExistingUser(request.form['username']):
+		return constructError('Username already taken.', 'renderAddUser')
+	try:
+		db.insertUser(reqeust.form['username'], request.form['password'], request.form['isAdmin'] == 'admin')
+		return constructSuccess('User %s created!'% request.form['username'], 'renderAddUser' )
+	except Exception as e:
+		return constructError(str(e), 'renderAddUser')
 
 @app.route('/addUser', methods = ['GET'])
 def renderAddUser():

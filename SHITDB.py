@@ -61,4 +61,23 @@ class SHITdb(object):
 		cur.close()
 		dbConn.close()
 		return rows
-
+	
+	def checkForExistingUser(self, username):
+		selectQuery = "SELECT user_no FROM users WHERE user_name = '%s'"
+		dbconn = self._getDatabaseConnection()
+		cur = dbconn.cursor()
+		cur.execute(selectQuery % username)
+		rows = [row for row in cur]
+		cur.close()
+		dbconn.close()
+		return rows
+	
+	def isAdmin(self, username):
+		selectQuery = "SELECT user_no FROM users WHERE user_name = '%s' AND user_type = 1"
+		dbconn = self._getDatabaseConnection()
+		cur = dbconn.cursor()
+		cur.execute(selectQuery % username)
+		rows = [row for row in cur]
+		cur.close()
+		dbconn.close()
+		return rows
