@@ -1,6 +1,14 @@
 #title {
 	float: left;
-	widows: 550px;
+	width: 550px;
+}
+
+h1 {
+	margin: 0%;
+}
+
+h2 {
+	margin: 0%;
 }
 
 #header {
@@ -8,8 +16,8 @@
 }
 
 #logout {
-    height: 150;
+	text-align: right;
+	display: grid;
+    height: 100px;
 }
-#content {
-    float:none;
-}
+

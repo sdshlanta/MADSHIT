@@ -10,7 +10,12 @@
 				<h3>Alternitive Data Interace Connector</h3>
 			</div>
 			{% if session.logged_in %}
-				<div id="logout">Welcome {{ name }}!<br><a href="{{ url_for('logout') }}">Logout</a></div>
+				<div id="logout">
+					<p>
+						Welcome {{ name }}!
+						<a href="{{ url_for('logout') }}">Logout</a>
+					</p>
+				</div>
 			{% endif %}
 			<hr>
 		</div>
