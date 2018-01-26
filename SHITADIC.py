@@ -66,7 +66,7 @@ def success():
 def addUser():
 	if len(request.form['password']) != 8:
 		return constructError('Password must be EXACTLY 8 chars.', 'renderAddUser')
-	elif not db.checkForExistingUser(request.form['username']):
+	elif db.checkForExistingUser(request.form['username']):
 		return constructError('Username already taken.', 'renderAddUser')
 	try:
 		db.insertUser(reqeust.form['username'], request.form['password'], request.form['isAdmin'] == 'admin')
