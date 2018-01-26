@@ -68,6 +68,7 @@ class SHITdb(object):
 		cur = dbconn.cursor()
 		cur.execute(selectQuery % username)
 		rows = [row for row in cur]
+		print(rows)
 		cur.close()
 		dbconn.close()
 		return rows
