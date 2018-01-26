@@ -9,11 +9,11 @@ def index():
 	error = None
 	if request.method == 'POST':
 		if db.checkLogin(request.form['username'], request.form['password']):
-			Session['username']
+			session['username']
 		else:
 			error = 'Incorrect username or password.'
 	else:
-		if 'username' in Session:
+		if 'username' in session:
 			username = session['username']
 		else:
 			username = None
