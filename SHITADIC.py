@@ -37,7 +37,7 @@ def logout():
 		del session['admin']
 	return redirect(url_for('index'))
 
-@app.route('/error', method=['GET'])
+@app.route('/error', methods=['GET'])
 def error():
 	error = session['error']
 	returnURL = session['returnURL']
