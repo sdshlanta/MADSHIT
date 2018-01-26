@@ -32,7 +32,7 @@ def logout():
 	return redirect(url_for('/'))
 
 def main():
-	app.secret_key = "This is mad SHIT right!?"
+	app.secret_key = "This is some mad SHIT!?!"
 	app.run("0.0.0.0", 5000, True)
 	
 
