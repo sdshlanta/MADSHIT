@@ -18,7 +18,7 @@ def index():
 			session['logged_in'] = True
 		else:
 			username = None
-		return render_template('index.html', name=username, error=error)
+	return render_template('index.html', name=username, error=error)
 	
 
 def main():
