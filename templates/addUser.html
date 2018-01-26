@@ -1,0 +1,25 @@
+{% extends "header.html" %}
+{{super()}}
+{% block title %}Add User{% endblock %}
+{% block content %}
+{% if session.logged_in %}
+	{% if session.admin %}
+		{% if session.error %}
+		<p id="error">{{ session.error }}</p>
+		<form method="POST" action="{{ url_for('addUser') }}" id="addUser">
+			<input type="text" name="username" id="username">
+			<input type="password" name="password" id="password">
+			<input type="radio" name="isAdmin" value="user" >
+			<input type="radio" name="isAdmin" value="admin">
+			<button type="submit">Create User</button>
+		</form>
+	{% else %}
+		<p>
+			Admin Only, sorry {{ session.username }},
+		</p>
+	{% endif %}
+{% else %}
+	<p>
+		How did you get here?
+	</p>
+{% endif %}

@@ -4,6 +4,11 @@
 	{% if session.logged_in %}
 	<div>
 		Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt dolore facere at odit eum veritatis eaque officiis impedit dolor exercitationem suscipit, aliquid reprehenderit cupiditate sequi delectus soluta unde commodi accusamus?		
+		<ul>
+			<li>
+				<a href="{{ url_for('renderAddUser') }}">Add a new user.</a>
+			</li>
+		</ul>
 	</div>
 	{% else %}
 	<div>

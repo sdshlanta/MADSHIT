@@ -53,7 +53,7 @@ class SHITdb(object):
 		return rows
 
 	def checkUserCreds(self, username, password):
-		selectQuery = "SELECT user_no FROM users WHERE user_name = '%s' AND user_passwd = '%s'"
+		selectQuery = "SELECT user_no, user_type FROM users WHERE user_name = '%s' AND user_passwd = '%s'"
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
 		cur.execute(selectQuery % (username, password))

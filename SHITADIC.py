@@ -6,14 +6,18 @@ app = Flask("Alternitive Data Interface Connector")
 
 @app.route('/',methods=['GET', 'POST'])
 def index():
-	error = None
 	if request.method == 'POST':
-		if db.checkUserCreds(request.form['username'], request.form['password']):
+		matchingUser = db.checkUserCreds(request.form['username'], request.form['password'])
+		if matchingUser:
 			session['username'] = request.form['username']
 			session['logged_in'] = True
-			username = session['username']
+			username = session['username']			
+			if matchingUser[1]:
+				session['admin'] = True
 		else:
-			error = 'Incorrect username or password.'
+			session['error'] = 'Incorrect username or password.'
+			session['returnURL'] = url_for('index')
+			return redirect(url_for('error'))
 			
 	else:
 		if 'username' in session:
@@ -21,7 +25,7 @@ def index():
 			username = session['username']
 		else:
 			username = None
-	return render_template('index.html', name=username, error=error)
+	return render_template('index.html')
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -29,7 +33,28 @@ def logout():
 		del session['logged_in']
 	if 'username' in session:
 		del session['username']
+	if 'admin' in session:
+		del session['admin']
 	return redirect(url_for('index'))
+
+@app.route('/error', method=['GET'])
+def error():
+	error = session['error']
+	returnURL = session['returnURL']
+	del session['error']
+	del session['returnURL']
+	return render_template('error.html', error, returnURL)
+
+@app.route('/api/addUser', methods = ['POST'])
+def addUser():
+	pass
+
+@app.route('/addUser', methods = ['GET'])
+def renderAddUser():
+	if logged_in not in session:
+		return redirect(url_for('index'))
+	else:
+		return render_template('addUser.html', name)
 
 def main():
 	app.secret_key = "This is some mad SHIT!?!"
