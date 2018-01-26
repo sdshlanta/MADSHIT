@@ -12,13 +12,15 @@ def index():
 			session['username'] = request.form['username']
 		else:
 			error = 'Incorrect username or password.'
+		return render_template('index.html', name=session['username'], error=error)
+			
 	else:
 		if 'username' in session:
 			username = session['username']
 			session['logged_in'] = True
 		else:
 			username = None
-	return render_template('index.html', name=username, error=error)
+		return render_template('index.html', name=username, error=error)
 	
 
 def main():
