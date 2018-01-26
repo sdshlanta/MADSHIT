@@ -29,7 +29,7 @@ def logout():
 		del session['logged_in']
 	if 'username' in session:
 		del session['username']
-	return redirect(url_for('/'))
+	return redirect(url_for('index')))
 
 def main():
 	app.secret_key = "This is some mad SHIT!?!"
