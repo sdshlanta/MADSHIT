@@ -69,7 +69,7 @@ def addUser():
 	elif db.checkForExistingUser(request.form['username']):
 		return constructError('Username already taken.', 'renderAddUser')
 	try:
-		db.insertUser(request.form['username'], request.form['password'], request.form['isAdmin'] == 'admin')
+		db.insertUser(request.form['username'], request.form['password'], int(request.form['isAdmin'] == 'admin'))
 		return constructSuccess('User %s created!'% request.form['username'], 'renderAddUser' )
 	except Exception as e:
 		return constructError(str(e), 'renderAddUser')
