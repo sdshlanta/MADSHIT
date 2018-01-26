@@ -51,7 +51,7 @@ def addUser():
 
 @app.route('/addUser', methods = ['GET'])
 def renderAddUser():
-	if logged_in not in session:
+	if 'logged_in' not in session:
 		return redirect(url_for('index'))
 	else:
 		return render_template('addUser.html', name)
