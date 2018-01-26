@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request
-import mysql.connector
+from flask import Flask, render_template, Request, Session
+import SHITDB
 import argparse
 
 app = Flask("Alternitive Data Interface Connector")
@@ -7,11 +7,16 @@ app = Flask("Alternitive Data Interface Connector")
 @app.route('/',methods=['GET', 'POST'])
 def index():
 	error = None
-	if request.method == 'POST':
-		if db.checkLogin(request.form['username'], request.form['password']):
-
+	if Request.method == 'POST':
+		if db.checkLogin(Request.form['username'], Request.form['password']):
+			Session['username']
+		else:
+			error = 'Incorrect username or password.'
 	else:
-		username = None
+		if 'username' in Session:
+			username = Session['username']
+		else:
+			username = None
 		return render_template('index.html', name=username, error=error)
 
 def main():
