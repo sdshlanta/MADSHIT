@@ -8,7 +8,7 @@ app = Flask("Alternitive Data Interface Connector")
 def index():
 	error = None
 	if request.method == 'POST':
-		if db.checkLogin(request.form['username'], request.form['password']):
+		if db.checkUserCreds(request.form['username'], request.form['password']):
 			session['username']
 		else:
 			error = 'Incorrect username or password.'
