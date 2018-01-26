@@ -4,13 +4,15 @@
 	</head>
 	<body>
 		<div id="header">
-			<h1>Secure Heart Information Transmitter</h1>
-			<h3>Alternitive Data Interace Connector</h3>
+			<div id="title">
+				<h1>Secure Heart Information Transmitter</h1>
+				<h3>Alternitive Data Interace Connector</h3>
+			</div>
+			{% if session.logged_in %}
+				<div id="logout">Welcome {{ name }}!<br><a href="{{ url_for('logout') }}">Logout</a></div>
+			{% endif %}
+			<hr>
 		</div>
-		{% if session.logged_in %}
-			<div id="logout">Welcome {{ name }}!<br><a href="{{ url_for('logout') }}">Logout</a></div>
-		{% endif %}
-		<hr>
 		<div id="content">{% block content %}{% endblock %}</div>
 	</body>
 </html>

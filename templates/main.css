@@ -1,7 +1,8 @@
 #header {
 	float: left;
+	widows: 550px;
 }
 
 #logout {
-	float: left;
+	
 }
