@@ -12,7 +12,7 @@ def index():
 			session['username'] = request.form['username']
 			session['logged_in'] = True
 			username = session['username']			
-			if matchingUser[1]:
+			if matchingUser[0][1]:
 				session['admin'] = True
 		else:
 			session['error'] = 'Incorrect username or password.'
