@@ -34,7 +34,7 @@ class SHITdb(object):
 		dbConn.close()
 
 	def insertUser(self, username, password, userType):
-		insertionQuery = "INSERT INTO user (user_name, user_passwd, user_type) VALUES (%s, %s, %s)"
+		insertionQuery = "INSERT INTO users (user_name, user_passwd, user_type) VALUES (%s, %s, %s)"
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
 		cur.execute(insertionQuery % (username, password, userType))
