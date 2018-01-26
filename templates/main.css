@@ -3,8 +3,13 @@
 	widows: 550px;
 }
 
+#header {
 
+}
 
 #logout {
-
+    height: 150;
+}
+#content {
+    float:none;
 }
