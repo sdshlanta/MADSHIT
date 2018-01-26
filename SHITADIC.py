@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, session
+from flask import Flask, render_template, session, request
 import SHITDB
 import argparse
 
