@@ -32,5 +32,5 @@ if __name__ == '__main__':
 	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is root", default="daSHIT")
 	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="")
 	args = parser.parse_args()
-	db = SHITDB.SHITdb(args.host, args.database, args.username, args.username)
+	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword)
 	main()
