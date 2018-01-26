@@ -7,13 +7,13 @@ app = Flask("Alternitive Data Interface Connector")
 @app.route('/',methods=['GET', 'POST'])
 def index():
 	error = None
-	if Request.method == 'POST':
-		if db.checkLogin(Request.form['username'], Request.form['password']):
+	if request.method == 'POST':
+		if db.checkLogin(request.form['username'], request.form['password']):
 			Session['username']
 		else:
 			error = 'Incorrect username or password.'
 	else:
-		if 'username' in Session:
+		if 'username' in session:
 			username = Session['username']
 		else:
 			username = None
@@ -32,5 +32,5 @@ if __name__ == '__main__':
 	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is root", default="daSHIT")
 	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="")
 	args = parser.parse_args()
-	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword)
+	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword )
 	main()
