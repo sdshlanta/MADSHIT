@@ -6,6 +6,7 @@
 		<h1>Secure Heart Information Transmitter</h1>
 		{% if session.logged_in %}
 		<div id="logout">Welcome {{ name }}!<br><a href="{{ url_for('logout') }}">Logout</a></div>
+		{% endif %}
 		<hr>
 		<div id="content">{% block content %}{% endblock %}</div>
 	</body>
