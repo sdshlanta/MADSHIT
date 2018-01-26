@@ -9,7 +9,7 @@ def index():
 	error = None
 	if request.method == 'POST':
 		if db.checkUserCreds(request.form['username'], request.form['password']):
-			session['username']
+			session['username'] = request.form['username']
 		else:
 			error = 'Incorrect username or password.'
 	else:
