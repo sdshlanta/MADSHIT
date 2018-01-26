@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request, redirect, url_for
 import SHITDB
 import argparse
 
@@ -11,10 +11,9 @@ def index():
 		if db.checkUserCreds(request.form['username'], request.form['password']):
 			session['username'] = request.form['username']
 			session['logged_in'] = True
-
+			username = session['username']
 		else:
 			error = 'Incorrect username or password.'
-		return render_template('index.html', name=session['username'], error=error)
 			
 	else:
 		if 'username' in session:
@@ -22,14 +21,15 @@ def index():
 			username = session['username']
 		else:
 			username = None
-		return render_template('index.html', name=username, error=error)
+	return render_template('index.html', name=username, error=error)
 
 @app.route('/logout', methods=['GET'])
 def logout():
 	if 'logged_in' in session:
 		del session['logged_in']
 	if 'username' in session:
-		del session['username'] 
+		del session['username']
+	return redirect(url_for('/'))
 
 def main():
 	app.secret_key = "This is mad SHIT right!?"
