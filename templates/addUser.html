@@ -4,8 +4,6 @@
 {% block content %}
 {% if session.logged_in %}
 	{% if session.admin %}
-		{% if session.error %}
-		<p id="error">{{ session.error }}</p>
 		<form method="POST" action="{{ url_for('addUser') }}" id="addUser">
 			<input type="text" name="username" id="username">
 			<input type="password" name="password" id="password">
@@ -23,3 +21,5 @@
 		How did you get here?
 	</p>
 {% endif %}
+{% endif %}
+{% endblock %}
