@@ -23,7 +23,13 @@ def index():
 		else:
 			username = None
 		return render_template('index.html', name=username, error=error)
-	
+
+@app.route('/logout', methods=['GET'])
+def logout():
+	if 'logged_in' in session:
+		del session['logged_in']
+	if 'username' in session:
+		del session['username'] 
 
 def main():
 	app.secret_key = "This is mad SHIT right!?"
