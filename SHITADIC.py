@@ -54,7 +54,7 @@ def renderAddUser():
 	if 'logged_in' not in session:
 		return redirect(url_for('index'))
 	else:
-		return render_template('addUser.html', name)
+		return render_template('addUser.html')
 
 def main():
 	app.secret_key = "This is some mad SHIT!?!"
