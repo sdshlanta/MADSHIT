@@ -10,14 +10,16 @@ def index():
 	if request.method == 'POST':
 		if db.checkUserCreds(request.form['username'], request.form['password']):
 			session['username'] = request.form['username']
+			session['logged_in'] = True
+
 		else:
 			error = 'Incorrect username or password.'
 		return render_template('index.html', name=session['username'], error=error)
 			
 	else:
 		if 'username' in session:
-			username = session['username']
 			session['logged_in'] = True
+			username = session['username']
 		else:
 			username = None
 		return render_template('index.html', name=username, error=error)
