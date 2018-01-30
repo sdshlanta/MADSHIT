@@ -1,0 +1,22 @@
+{% extends "header.html" %}
+{{super()}}
+{% block title %}Database Interface{% endblock %}
+{% block content %}
+	<fourm>
+		<table>
+			<tr>
+				<th>ID</th><th>Type</th><th>Time</th><th>Length</th>
+			</tr>
+			{% for id, type, time, length in rows %}
+			<tr>
+				<td>{{id}}</td>
+				<td>{{type}}</td>
+				<td>{{time}}</td>
+				<td>{{length}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</fourm>
+
+
+{% endblock %}
