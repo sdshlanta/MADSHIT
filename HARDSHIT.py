@@ -9,6 +9,12 @@ GPIO.setmode(GPIO.BCM)
 
 aSHITType = {}
 
+newPressAllowed = True
+
+
+def debouncer():
+	newPressAllowed = True
+
 def startASHIT():
 	print("Enabled alarm")
 	GPIO.output(2, GPIO.HIGH)
@@ -28,7 +34,12 @@ def main():
 					   args.databasePassword)
 
 	def shitInterrupt(channel):
-		db.insertASHIT(aSHITType[str(channel)], args.testAlertLength)
+		if newPressAllowed:
+			newPressAllowed = False
+			newPressTimer = threading.Timer(args.debounceTimeout, debouncer)
+			db.insertASHIT(aSHITType[str(channel)], args.testAlertLength)
+			newPressTimer.start()
+			
 	
 	GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 	GPIO.setup([2, 3], GPIO.OUT)
@@ -71,6 +82,7 @@ if __name__ == '__main__':
 	parser.add_argument("-l", "--testAlertLength", type=int, help="The amount of time a test alert should last", default=5)
 	parser.add_argument("-a", "--lastAlarmNumber", type=int, help="The set the inital value for the last alarm", default = -1)
 	parser.add_argument('-p', '--pinMap', type=lambda x: json.load(open(x)), help="Specifiy the pin mapping file for pin to alarm mapping. Default filename is pinMap.json", default=json.load(open('pinMap.json')))
+	parser.add_argument('-d', '--debounceTimeout', type=float, help='The number of seconds to wait before registering another button press, default is 0.5')
 	args = parser.parse_args()
 	aSHITType = args.pinMap
 	main()
