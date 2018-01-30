@@ -42,7 +42,7 @@ class SHITdb(object):
 		cur.close()
 		dbConn.close()
 
-	def selectMostRecentASHIT(self, limit = 1):
+	def selectPreviousAsSHIT(self, limit = 1):
 		selectQuery = "SELECT shit_no, shit_length, shit_type FROM ashit ORDER BY shit_time DESC LIMIT %d"
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
@@ -84,7 +84,7 @@ class SHITdb(object):
 		return rows
 	
 	def isAdmin(self, username):
-		selectQuery = "SELECT user_no FROM users WHERE user_name = '%s' AND user_type = 1"
+		selectQuery = "SELECT user_no FROM users WHERE user_type = 1 AND user_name = '%s'"
 		dbconn = self._getDatabaseConnection()
 		cur = dbconn.cursor()
 		cur.execute(selectQuery % username)
