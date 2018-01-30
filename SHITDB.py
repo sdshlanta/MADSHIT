@@ -47,10 +47,20 @@ class SHITdb(object):
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
 		cur.execute(selectQuery % limit)
-		rows =  [row for row in cur]
+		rows = [row for row in cur]
 		cur.close()
 		dbConn.close()
 		return rows
+	
+	def selectAllASHIT(self):
+		selectQuery = "SELECT * FROM ashit"
+		dbConn = self._getDatabaseConnection()
+		cur = dbConn.cursor()
+		cur.execute(selectQuery)
+		rows = [row for rows in cur]
+		cru.close()
+		dbConn.close()
+		return rows		
 
 	def checkUserCreds(self, username, password):
 		selectQuery = "SELECT user_no, user_type FROM users WHERE user_name = '%s' AND user_passwd = '%s'"
