@@ -81,6 +81,14 @@ def renderAddUser():
 	else:
 		return render_template('addUser.html')
 
+@app.route('/checkASHIT', methods = ['GET'])
+def renderASHITCheck():
+	if 'logged_in' not in session:
+		return redirect(url_for('index'))
+	else:
+		rows = db.selectAllASHIT()
+		return render_template('databaseInterface.html', rows=rows)
+
 def main():
 	app.secret_key = "This is some mad SHIT!?!"
 	app.run("0.0.0.0", 5000, True)
