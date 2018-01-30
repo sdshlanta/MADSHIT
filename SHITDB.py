@@ -57,7 +57,7 @@ class SHITdb(object):
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
 		cur.execute(selectQuery)
-		rows = [row for rows in cur]
+		rows = [row for row in cur]
 		cru.close()
 		dbConn.close()
 		return rows		
