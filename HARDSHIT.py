@@ -11,8 +11,8 @@ aSHITType = {}
 
 newPressAllowed = True
 
-
 def debouncer():
+	global newPressAllowed
 	newPressAllowed = True
 
 def startASHIT():
@@ -35,6 +35,7 @@ def main():
 					   args.databasePassword)
 
 	def shitInterrupt(channel):
+		global newPressAllowed
 		if newPressAllowed:
 			newPressAllowed = False
 			newPressTimer = threading.Timer(args.debounceTimeout, debouncer)
