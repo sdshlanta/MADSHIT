@@ -9,7 +9,7 @@
 			</tr>
 			{% for id, type, time, length in rows %}
 			<tr>
-				<td>{{id}}</td>
+				<td><a href="{{ url_for('renderDatabaseDetail') }}/{{id}}">{{id}}</a></td>
 				<td>{{type}}</td>
 				<td>{{time}}</td>
 				<td>{{length}}</td>
