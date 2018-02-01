@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, request, redirect, url_for
 import SHITDB
 import argparse
 
-app = Flask("Alternitive Data Interface Connector")
+app = Flask("Alarm Database Interface Connector")
 
 def constructError(error, returnLocation):
 	session['error'] = error
@@ -69,10 +69,14 @@ def addUser():
 	elif db.checkForExistingUser(request.form['username']):
 		return constructError('Username already taken.', 'renderAddUser')
 	try:
-		db.insertUser(request.form['username'], request.form['password'], int(request.form['isAdmin'] == 'admin'))
+		db.insertUser(
+			request.form['username']
+			,request.form['password']
+			,int(request.form['isAdmin'] == 'admin')
+		)
 		return constructSuccess('User %s created!'% request.form['username'], 'renderAddUser' )
 	except Exception as e:
-		return constructError(str(e), 'renderAddUser')
+		return constructError('Unable to add %s, the following error occured: %s' % (request.form['username'], str(e)), 'renderAddUser')
 
 @app.route('/addUser', methods = ['GET'])
 def renderAddUser():
@@ -81,13 +85,45 @@ def renderAddUser():
 	else:
 		return render_template('addUser.html')
 
-@app.route('/checkASHIT', methods = ['GET'])
+@app.route('/checkAlarms', methods = ['GET'])
 def renderASHITCheck():
 	if 'logged_in' not in session:
 		return redirect(url_for('index'))
 	else:
 		rows = db.selectAllASHIT()
 		return render_template('databaseInterface.html', rows=rows)
+
+@app.route('/api/updateASHIT', methods = ['POST'])
+def updateASHIT():
+	form = request.form
+	try:
+		db.updateASHIT(
+			form['shit_no']
+			,form['shit_type']
+			,form['shit_time']
+			,form['shit_length']
+		)
+		redir = constructSuccess('Alarm number %s updated' % form['shit_no'], 'renderASHITCheck')
+	except Exception as e:
+		redir = constructError('Update ot alarm number %s failed due to: %s' % (form['shit_no'], str(e)), 'renderASHITCheck' )
+	finally:
+		return redir
+
+@app.route('/aSHIT/<shit_no>', methods=['GET'])
+def renderDatabaseDetail():
+	if 'logged_in' not in session:
+		return redirect(url_for('index'))
+	else:
+		no_shit, shit_type, shit_time, shit_length = db.selectASpecficSHIT(shit_no)[0]
+		return render_template(
+			'alarmDetail.html'
+			,shit_no=no_shit
+			,shit_type=shit_type
+			,shit_time=shit_time
+			,shit_length=shit_length
+		)
+
+
 
 def main():
 	app.secret_key = "This is some mad SHIT!?!"
