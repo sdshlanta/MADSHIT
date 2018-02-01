@@ -42,7 +42,7 @@ class SHITdb(object):
 		cur.close()
 		dbConn.close()
 
-	def selectPreviousAsSHIT(self, limit = 1):
+	def selectPreviousASHIT(self, limit = 1):
 		selectQuery = "SELECT shit_no, shit_length, shit_type FROM ashit ORDER BY shit_time DESC LIMIT %d"
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
@@ -61,6 +61,16 @@ class SHITdb(object):
 		cur.close()
 		dbConn.close()
 		return rows		
+	
+	def selectASpecficSHIT(self, shit_no):
+		selectQuery = "SELECT * FROM ashit WHERE shit_no = '%s';"
+		dbConn = self._getDatabaseConnection()
+		cur = dbConn.cursor()
+		cur.execute(selectQuery % str(shit_no))
+		rows = [row for row in cur]
+		cur.close()
+		dbConn.close()
+		return rows
 
 	def checkUserCreds(self, username, password):
 		selectQuery = "SELECT user_no, user_type FROM users WHERE user_name = '%s' AND user_passwd = '%s'"
@@ -92,3 +102,12 @@ class SHITdb(object):
 		cur.close()
 		dbconn.close()
 		return rows
+
+	def updateASHIT(self, shit_no, shit_type, shit_time, shit_length):
+		updateQuery = "UPDATE ashit SET shit_type=%s, shit_time=%s, shit_length=%s WHERE shit_no = %s"
+		dbConn = self._getDatabaseConnection()
+		cur = dbConn.cursor()
+		cur.execute(updateQuery % (shit_type, shit_time, shit_length, shit_no))
+		dbConn.commit()
+		cur.close()
+		dbConn.close()
