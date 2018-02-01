@@ -104,7 +104,7 @@ class SHITdb(object):
 		return rows
 
 	def updateASHIT(self, shit_no, shit_type, shit_time, shit_length):
-		updateQuery = "UPDATE ashit SET shit_type=%s, shit_time=%s, shit_length=%s WHERE shit_no = %s"
+		updateQuery = "UPDATE ashit SET shit_type='%s', shit_time='%s', shit_length='%s' WHERE shit_no = '%s'"
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
 		cur.execute(updateQuery % (shit_type, shit_time, shit_length, shit_no))
