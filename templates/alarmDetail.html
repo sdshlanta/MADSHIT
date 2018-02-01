@@ -1,0 +1,31 @@
+{% extends "header.html" %}
+{{super()}}
+{% block title %}Alarm {{ shit_no }} Detail{% endblock %}
+{% block content %}
+	<form action="{{ url_for('updateASHIT') }}" method="POST">
+		<table>
+			<tr>
+				<th>ID</th><th>Type</th><th>Time</th><th>Length</th>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" name='shit_no' value="{{ shit_no }}" readonly>
+				</td>
+				<td>
+					<input type="text" name="shit_type" value="{{ shit_type }}">
+				</td>
+				<td>
+					<input type="datetime" name="shit_time" value="{{ shit_time }}">
+				</td>
+				<td>
+					<input type="text" name="shit_length" value="{{ shit_length }}">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button type="submit">Update</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+{% endblock %}
