@@ -53,7 +53,7 @@ def main():
 		while True:
 			for shit_no, shit_length, shit_type in db.selectPreviousASHIT(limit=10):
 				if shit_no > latestSHITNo:
-					print(shit_no, shit_length, shit_type)
+					# print(shit_no, shit_length, shit_type)
 					if shit_type == 5:
 						if aCurrentSHIT is not None:
 							aCurrentSHIT.cancel()
@@ -67,7 +67,7 @@ def main():
 						latestSHITNo = shit_no
 
 			
-			print(aCurrentSHIT)
+			# print(aCurrentSHIT)
 			time.sleep(1)
 
 	except KeyboardInterrupt:
