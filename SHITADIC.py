@@ -110,7 +110,7 @@ def updateASHIT():
 		return redir
 
 @app.route('/aSHIT/<shit_no>', methods=['GET'])
-def renderDatabaseDetail():
+def renderDatabaseDetail(shit_no):
 	if 'logged_in' not in session:
 		return redirect(url_for('index'))
 	else:
@@ -134,8 +134,8 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser("Secure Heart Information Transmitter Alternitive Data Connector")
 	parser.add_argument("-N", "--databaseName", type=str, help="Name of the database used by the Secure Heart Information Transmitter. Default is 'doshit'.", default="doshit")
 	parser.add_argument("-H", "--databaseHost", type=str, help="The host the database is running on.  Default is 127.0.0.1", default="127.0.0.1")
-	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is root", default="daSHIT")
-	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="")
+	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is dashit", default="dashit")
+	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="Password1!")
 	args = parser.parse_args()
 	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword )
 	main()
