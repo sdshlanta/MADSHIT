@@ -1,6 +1,6 @@
 CREATE DATABASE doshit DEFAULT CHARACTER SET 'utf8';
 
-GRANT ALL PRIVILEGES ON *.* TO 'dashit'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'dashit'@'%' IDENTIFIED BY 'Password1!';
 USE doshit;
 
 CREATE TABLE ashit (
