@@ -75,7 +75,7 @@ def main():
 					if shit_finished == 1:
 						if aCurrentSHIT.is_alive():
 							aCurrentSHIT.cancel()
-							stopASHIT(shit_no)
+							stopASHIT(shit_no, db)
 						
 					elif latestSHITLength != shit_length:
 						aCurrentSHIT.cancel()
