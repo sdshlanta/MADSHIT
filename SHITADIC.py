@@ -85,6 +85,44 @@ def renderAddUser():
 	else:
 		return render_template('addUser.html')
 
+@app.route('/u/<username>', methods = ['GET'])
+def renderUserInfo(username):
+	rows = db.selectUser(username)
+	if not rows:
+		return constructError('Unable to find user %s' % username, 'index')
+	else:
+		userNo, username, password, isAdmin = rows[0]
+		if 'admin' in session or (session['username'] == username):
+			return render_template('userInfo.html', userNo = userNo, username=username, password=password, isAdmin=isAdmin )			
+		else:
+			return render_template('userInfo.html', userNo = userNo, username=username, isAdmin=isAdmin )
+
+
+@app.route('/users', methods = ['GET'])
+def renderUserList():
+	if 'logged_in' not in session:
+		return redirect(url_for('index'))
+	else:
+		rows = db.selectAllUsers()
+		return render_template('userList.html', rows = rows)
+
+@app.route('/api/updateUser', methods = ['POST'])
+def updateUser():
+	form = request.form
+	if len(form['password']) != 8:
+		return constructError('Password must be EXACTLY 8 chars.', 'renderUserList')
+	try:
+		db.updateUser(
+			form['userNo']
+			,form['username']
+			,form['password']			
+			,form['isAdmin']
+		)
+		return constructSuccess('Updated user %s, please logout and login for chagnes to take place.' % form['username'], 'renderUserList')
+	except Exception as e:
+		return constructError('Unable to update user %s the followig error occurred: %s' % (form['username'],str(e)), 'renderUserList')
+	
+
 @app.route('/checkAlarms', methods = ['GET'])
 def renderASHITCheck():
 	if 'logged_in' not in session:
@@ -102,6 +140,7 @@ def updateASHIT():
 			,form['shit_type']
 			,form['shit_time']
 			,form['shit_length']
+			,form['shit_finished']
 		)
 		redir = constructSuccess('Alarm number %s updated' % form['shit_no'], 'renderASHITCheck')
 	except Exception as e:
@@ -114,16 +153,15 @@ def renderDatabaseDetail(shit_no):
 	if 'logged_in' not in session:
 		return redirect(url_for('index'))
 	else:
-		no_shit, shit_type, shit_time, shit_length = db.selectASpecficSHIT(shit_no)[0]
+		no_shit, shit_type, shit_time, shit_length, shit_finished = db.selectASpecficSHIT(shit_no)[0]
 		return render_template(
 			'alarmDetail.html'
 			,shit_no=no_shit
 			,shit_type=shit_type
 			,shit_time=shit_time
 			,shit_length=shit_length
+			,shit_finished=shit_finished
 		)
-
-
 
 def main():
 	app.secret_key = "This is some mad SHIT!?!"
