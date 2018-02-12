@@ -1,0 +1,63 @@
+{% extends "header.html" %}
+{{super()}}
+{% block title %}User {{ username }} Info{% endblock %}
+{% block content %}
+	<form action="/api/updateUser" method="POST">
+		<table>
+			<tr>
+				<th>Number</th>
+				<th>Username</th>
+				<th>Password</th>
+				<th>Type</th>
+			</tr>
+			<tr>
+				<td>
+					{{ userNo }}
+				</td>
+				<td>
+					<input type="text" name="username" value="{{ username }}">
+				</td>
+				<td>
+					{% if session.username == "admin" or session.username == username %}
+					<input type="text" name="password" value="{{ password }}">
+					{% else %}
+					<input type="text" name="password" value="Admin or {{username}}'s eyes only ;)">
+					{% endif %}
+				</td>
+				<td>
+					<table>
+						<tr>
+							<td>
+								Admin
+							</td>
+							<td>
+								User
+							</td>
+						</tr>
+						<tr>
+							{% if isAdmin %}
+								<td>
+									<input type="radio" name="isAdmin" value="1" checked>
+								</td>
+								<td>
+									<input type="radio" name="isAdmin" value="0">
+								</td>
+							{% else %}
+								<td>
+									<input type="radio" name="isAdmin" value="1">
+								</td>
+								<td>
+									<input type="radio" name="isAdmin" value="0" checked>
+								</td>
+							{% endif %}
+						</tr>
+					</table>					
+				</td>
+			</tr>
+		</table>
+		{% if session.admin or session.username == username %}
+			<input type="text" name="userNo" value="{{userNo}}" hidden>
+			<input type="submit" value="Update">
+		{% endif %}
+	</form>
+{% endblock %}

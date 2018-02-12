@@ -1,0 +1,29 @@
+{% extends "header.html" %}
+{{super()}}
+{% block title %}User List{% endblock %}
+{% block content %}
+	<table>
+		<tr>
+			<th>Number</th>
+			<th>Username</th>
+			<th>Password</th>
+			<th>Type</th>
+		</tr>
+		{% for id, name, password, admin in rows %}
+		<tr>
+			<td><a href="/u/{{name}}">{{id}}</a></td>
+			<td><a href="/u/{{name}}">{{name}}</a></td>
+			{% if session.admin %}
+				<td>{{ password }}</td>
+			{% else %}
+				<td>********</td>
+			{% endif %}			
+			{% if admin %}
+				<td>Admin</td>
+			{% else %}
+				<td>User</td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock %}
