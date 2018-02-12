@@ -20,16 +20,19 @@ def startASHIT():
 	GPIO.output(2, GPIO.HIGH)
 	GPIO.output(3, GPIO.HIGH)
 
-def stopASHIT():
+def stopASHIT(shitNo, dbConn):
 	print("Disabled alarm")
 	GPIO.output(2, GPIO.LOW)
 	GPIO.output(3, GPIO.LOW)
+	dbConn.finishASHIT(shitNo)
+
 
 def main():
 
 	aCurrentSHIT = threading.Timer(0, stopASHIT)
 	aCurrentSHIT.start()
 	latestSHITNo = args.lastAlarmNumber
+	latestSHITLength = 0
 
 	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, 
 					   args.databasePassword)
@@ -51,22 +54,32 @@ def main():
 	
 	try:
 		while True:
-			for shit_no, shit_length, shit_type in db.selectPreviousASHIT(limit=10):
+			for shit_no, shit_length, shit_type, shit_finished in db.selectPreviousASHIT(limit=10):
 				if shit_no > latestSHITNo:
 					# print(shit_no, shit_length, shit_type)
 					if shit_type == 5:
-						if aCurrentSHIT is not None:
+						if aCurrentSHIT.is_alive():
 							aCurrentSHIT.cancel()
-							stopASHIT()
+							stopASHIT(shit_no)
 							latestSHITNo = shit_no
 
 					elif not aCurrentSHIT.is_alive():
 						startASHIT()
-						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT)
+						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, dbConn))
 						aCurrentSHIT.start()
 						latestSHITNo = shit_no
-
-			
+						latestSHITLength = int(shit_length)
+						latestSHITStartTime = int(time.time())
+						
+				elif shit_no == latestSHITNo:
+					if shit_finished == 1:
+						if aCurrentSHIT.is_alive():
+							aCurrentSHIT.cancel()
+							stopASHIT(shit_no)
+						
+					elif latestSHITLength != shit_length:
+						aCurrentSHIT.cancel()
+						aCurrentSHIT = threading.Timer(float(shit_length - int(latestSHITStartTime - int(time.time())), stopASHIT)
 			# print(aCurrentSHIT)
 			time.sleep(1)
 
