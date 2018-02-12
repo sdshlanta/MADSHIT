@@ -1,3 +1,4 @@
+DROP DATABASE doshit;
 CREATE DATABASE doshit DEFAULT CHARACTER SET 'utf8';
 
 GRANT ALL PRIVILEGES ON *.* TO 'dashit'@'%' IDENTIFIED BY 'Password1!';
@@ -10,6 +11,8 @@ CREATE TABLE ashit (
 	shit_length int(64) NOT NULL,
 	shit_finished int(1) NOT NULL DEFAULT 0
 );
+
+INSERT INTO ashit (shit_type, shit_length) VALUES (2, 5);
 
 CREATE TABLE users (
 	user_no int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
