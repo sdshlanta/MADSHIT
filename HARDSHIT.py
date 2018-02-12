@@ -56,7 +56,7 @@ def main():
 		while True:
 			for shit_no, shit_length, shit_type, shit_finished in db.selectPreviousASHIT(limit=10):
 				if shit_no > latestSHITNo:
-					# print(shit_no, shit_length, shit_type)
+					print(shit_no, shit_length, shit_type)
 					if shit_type == 5:
 						if aCurrentSHIT.is_alive():
 							aCurrentSHIT.cancel()
@@ -64,6 +64,7 @@ def main():
 							latestSHITNo = shit_no
 
 					elif not aCurrentSHIT.is_alive():
+						print("starting shit")
 						startASHIT()
 						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
 						aCurrentSHIT.start()
@@ -72,14 +73,17 @@ def main():
 						latestSHITStartTime = int(time.time())
 						
 				elif shit_no == latestSHITNo:
+					print("Same shit")
 					if shit_finished == 1:
 						if aCurrentSHIT.is_alive():
+							print("canceling shit")
 							aCurrentSHIT.cancel()
 							stopASHIT(shit_no, db)
 						
 					elif latestSHITLength != shit_length:
+						print("modifying shit time")
 						aCurrentSHIT.cancel()
-						aCurrentSHIT = threading.Timer(float(shit_length - int(latestSHITStartTime - int(time.time())), stopASHIT))
+						aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time()))), stopASHIT))
 			time.sleep(1)
 
 	except KeyboardInterrupt:
