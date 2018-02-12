@@ -2,22 +2,28 @@
 {{super()}}
 {% block title %}Database Interface{% endblock %}
 {% block content %}
-	<fourm>
-		<table>
-			<tr>
-				<th>ID</th><th>Type</th><th>Time</th><th>Length</th><th>Finished</th>
-			</tr>
-			{% for id, type, time, length, finished in rows %}
-			<tr>
-				<td><a href="/aSHIT/{{id}}">{{id}}</a></td>
-				<td>{{type}}</td>
-				<td>{{time}}</td>
-				<td>{{length}}</td>
-				<td>{{finished}}</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</fourm>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Type</th>
+			<th>Time</th>
+			<th>Length</th>
+			<th>Finished</th>
+		</tr>
+		{% for id, type, time, length, finished in rows %}
+		<tr>
+			<td><a href="/aSHIT/{{id}}">{{id}}</a></td>
+			<td>{{type}}</td>
+			<td>{{time}}</td>
+			<td>{{length}}</td>
+			{% if finished %}
+				<td>Yes</td>
+			{% else %}
+				<td>No</td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</table>
 
 
 {% endblock %}
