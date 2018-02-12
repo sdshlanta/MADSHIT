@@ -5,7 +5,11 @@
 	<form action="{{ url_for('updateASHIT') }}" method="POST">
 		<table>
 			<tr>
-				<th>ID</th><th>Type</th><th>Time</th><th>Length</th><th>Finished</th>
+				<th>ID</th>
+				<th>Type</th>
+				<th>Time</th>
+				<th>Length</th>
+				<th>Finished</th>
 			</tr>
 			<tr>
 				<td>
@@ -22,6 +26,14 @@
 				</td>
 				<td>
 					<table>
+						<tr>
+							<td>
+								Yes
+							</td>
+							<td>
+								No
+							</td>
+						</tr>
 						<tr>
 							{% if shit_finished %}
 							<td>
