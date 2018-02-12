@@ -149,3 +149,13 @@ class SHITdb(object):
 		dbConn.commit()
 		cur.close()
 		dbConn.close()
+	
+	def getConfigData(self):
+		selectQuery = "SELECT * FROM SHITconfig"
+		dbConn = self._getDatabaseConnection()
+		cur = dbConn.cursor()
+		cur.execute(selectQuery)
+		rows = [row for row in cur]
+		cur.close()
+		dbConn.close()
+		return rows
