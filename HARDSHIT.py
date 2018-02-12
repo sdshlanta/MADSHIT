@@ -85,6 +85,7 @@ def main():
 						aCurrentSHIT.cancel()
 						aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time()))), stopASHIT))
 			time.sleep(1)
+			print("new press allowed: " + str(newPressAllowed))
 
 	except KeyboardInterrupt:
 		pass
