@@ -72,7 +72,7 @@ class SHITdb(object):
 		dbConn.close()
 
 	def selectPreviousASHIT(self, limit = 1):
-		selectQuery = "SELECT shit_no, shit_length, shit_type FROM ashit ORDER BY shit_time DESC LIMIT %d"
+		selectQuery = "SELECT shit_no, shit_length, shit_type, shit_finished FROM ashit ORDER BY shit_time DESC LIMIT %d"
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
 		cur.execute(selectQuery % limit)
@@ -132,11 +132,20 @@ class SHITdb(object):
 		dbconn.close()
 		return rows
 
-	def updateASHIT(self, shit_no, shit_type, shit_time, shit_length):
-		updateQuery = "UPDATE ashit SET shit_type='%s', shit_time='%s', shit_length='%s' WHERE shit_no = '%s'"
+	def updateASHIT(self, shit_no, shit_type, shit_time, shit_length, shit_finished):
+		updateQuery = "UPDATE ashit SET shit_type='%s', shit_time='%s', shit_length='%s', shit_finished='%s' WHERE shit_no = '%s'"
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
-		cur.execute(updateQuery % (shit_type, shit_time, shit_length, shit_no))
+		cur.execute(updateQuery % (shit_type, shit_time, shit_length, shit_finished, shit_no))
+		dbConn.commit()
+		cur.close()
+		dbConn.close()
+	
+	def finishASHIT(self, shit_no):
+		updateQuery = "UPDATE ashit SET shit_finished='1' WHERE shit_no = '%s'"
+		dbConn = self._getDatabaseConnection()
+		cur = dbConn.cursor()
+		cur.execute(updateQuery %  shit_no)
 		dbConn.commit()
 		cur.close()
 		dbConn.close()
