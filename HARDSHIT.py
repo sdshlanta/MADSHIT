@@ -5,7 +5,9 @@ import time
 import threading
 import json
 
-
+GPIO.setmode(GPIO.BCM)
+aSHITType = {}
+newPressAllowed = True
 
 def debouncer():
 	global newPressAllowed
@@ -93,9 +95,6 @@ def main():
 		GPIO.cleanup()
 
 if __name__ == '__main__':
-	GPIO.setmode(GPIO.BCM)
-	aSHITType = {}
-	newPressAllowed = True
 
 	parser = argparse.ArgumentParser(description="Hardware Action Reporting Device for Secure Heart Information Transmitter.")
 	parser.add_argument("-N", "--databaseName", type=str, help="Name of the database used by the Secure Heart Information Transmitter. Default is doshit", default="doshit")
