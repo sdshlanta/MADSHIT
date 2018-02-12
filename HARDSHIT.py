@@ -107,7 +107,7 @@ if __name__ == '__main__':
 	parser.add_argument("-l", "--testAlertLength", type=int, help="The amount of time a test alert should last", default=5)
 	parser.add_argument("-a", "--lastAlarmNumber", type=int, help="The set the inital value for the last alarm", default = -1)
 	parser.add_argument('-p', '--pinMap', type=lambda x: json.load(open(x)), help="Specifiy the pin mapping file for pin to alarm mapping. Default filename is pinMap.json", default=json.load(open('pinMap.json')))
-	parser.add_argument('-d', '--debounceTimeout', type=float, help='The number of seconds to wait before registering another button press, default is 0.5')
+	parser.add_argument('-d', '--debounceTimeout', type=float, help='The number of seconds to wait before registering another button press, default is 1', default = 1)
 	args = parser.parse_args()
 	aSHITType = args.pinMap
 	main()
