@@ -5,11 +5,7 @@ import time
 import threading
 import json
 
-GPIO.setmode(GPIO.BCM)
 
-aSHITType = {}
-
-newPressAllowed = True
 
 def debouncer():
 	global newPressAllowed
@@ -30,6 +26,8 @@ def stopASHIT(shitNo, dbConn):
 def main():
 
 	latestSHITLength = 0
+	GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+	GPIO.setup([2, 3], GPIO.OUT)
 
 	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, 
 					   args.databasePassword)
@@ -50,8 +48,6 @@ def main():
 			newPressTimer.start()
 			
 	
-	GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
-	GPIO.setup([2, 3], GPIO.OUT)
 
 	for pin in map(int, aSHITType.keys()):
 		GPIO.add_event_detect(pin, GPIO.RISING, callback=shitInterrupt)
@@ -92,6 +88,10 @@ def main():
 		GPIO.cleanup()
 
 if __name__ == '__main__':
+	GPIO.setmode(GPIO.BCM)
+	aSHITType = {}
+	newPressAllowed = True
+
 	parser = argparse.ArgumentParser(description="Hardware Action Reporting Device for Secure Heart Information Transmitter.")
 	parser.add_argument("-N", "--databaseName", type=str, help="Name of the database used by the Secure Heart Information Transmitter. Default is doshit", default="doshit")
 	parser.add_argument("-H", "--databaseHost", type=str, help="The host the database is running on.  Default is 127.0.0.1", default="127.0.0.1")
