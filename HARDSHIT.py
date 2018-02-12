@@ -8,6 +8,7 @@ import json
 GPIO.setmode(GPIO.BCM)
 aSHITType = {}
 newPressAllowed = True
+newPressTimer = None
 
 def debouncer():
 	global newPressAllowed
@@ -43,6 +44,7 @@ def main():
 
 	def shitInterrupt(channel):
 		global newPressAllowed
+		global newPressTimer
 		if newPressAllowed:
 			newPressAllowed = False
 			newPressTimer = threading.Timer(args.debounceTimeout, debouncer)
@@ -88,6 +90,7 @@ def main():
 						aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time()))), stopASHIT))
 			time.sleep(1)
 			print("new press allowed: " + str(newPressAllowed))
+			print()
 
 	except KeyboardInterrupt:
 		pass
