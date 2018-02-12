@@ -5,7 +5,7 @@
 	<form action="{{ url_for('updateASHIT') }}" method="POST">
 		<table>
 			<tr>
-				<th>ID</th><th>Type</th><th>Time</th><th>Length</th>
+				<th>ID</th><th>Type</th><th>Time</th><th>Length</th><th>Finished</th>
 			</tr>
 			<tr>
 				<td>
@@ -19,6 +19,28 @@
 				</td>
 				<td>
 					<input type="text" name="shit_length" value="{{ shit_length }}">
+				</td>
+				<td>
+					<table>
+						<tr>
+							{% if shit_finished %}
+							<td>
+								<input type="radio" name="shit_finished" value="1" checked>
+							</td>
+							<td>
+								<input type="radio" name="shit_finished" value="0">
+							</td>
+							{% else %}
+							<td>
+								<input type="radio" name="shit_finished" value="1">
+							</td>
+							<td>
+								<input type="radio" name="shit_finished" value="0" checked>
+							</td>
+							{% endif %}	
+						</tr>
+					</table>
+
 				</td>
 			</tr>
 			<tr>
