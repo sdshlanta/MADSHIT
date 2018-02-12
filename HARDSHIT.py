@@ -34,7 +34,7 @@ def main():
 	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, 
 					   args.databasePassword)
 	latestSHITNo = args.lastAlarmNumber
-	shit_no, shit_length, shit_type, shit_finished = db.selectASpecficSHIT(1)
+	shit_no, shit_length, shit_type, shit_finished = db.selectASpecficSHIT(limit=1)[0]
 	latestSHITLength = shit_length
 	aCurrentSHIT = threading.Timer(0, stopASHIT, args=(shit_no, db))
 	startASHIT()
