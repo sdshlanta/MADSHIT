@@ -35,7 +35,7 @@ def main():
 					   args.databasePassword)
 	latestSHITNo = args.lastAlarmNumber
 	print(db.selectASpecficSHIT(1))
-	shit_no, shit_length, shit_type, shit_finished = db.selectASpecficSHIT(1)[0]
+	shit_no, shit_type, shit_time, shit_length, shit_finished = db.selectASpecficSHIT(1)[0]
 	latestSHITLength = shit_length
 	aCurrentSHIT = threading.Timer(0, stopASHIT, args=(shit_no, db))
 	startASHIT()
