@@ -27,3 +27,5 @@ CREATE TABLE SHITconfig (
 	debounce_timeout int(8) UNSIGNED NOT NULL DEFAULT 1
 	,alarm_length int(64) UNSIGNED NOT NULL DEFAULT 5
 );
+/* setup defaults */
+INSERT INTO SHITconfig () VALUES ();
