@@ -2,7 +2,7 @@
 {{super()}}
 {% block title %}User {{ username }} Info{% endblock %}
 {% block content %}
-	<form action="/api/updateUser" method="POST">
+	<form action="{{ url_for('updateUser') }}" method="POST">
 		<table>
 			<tr>
 				<th>Number</th>
