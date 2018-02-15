@@ -1,0 +1,21 @@
+{% extends "header.html" %}
+{{super()}}
+{% block title %}Config Alarms{% endblock %}
+{% block content %}
+<form action="{{ url_for('configAlarms') }}" method="POST">
+	<table>
+		<tr>
+			<th>Button Debounce Timeout</th>
+			<td><input type="text" name="debounce_timeout" value="{{ debounce_timeout }}"></td>
+		</tr>
+		<tr>
+			<th>Alarm Length</th>
+			<td><input type="text" name="alarm_length" value="{{ alarm_length }}"></td>
+		</tr>
+		<tr>
+			<th>Save</th>
+			<td><input type="submit" value="Save"></td>
+		</tr>
+	</table>		
+</form>
+{% endblock %}

@@ -159,3 +159,12 @@ class SHITdb(object):
 		cur.close()
 		dbConn.close()
 		return rows
+	
+	def updateConfig(self, debouce_timeout, alarm_length):
+		updateQuery = "UPDATE SHITconfig SET debounce_timeout='%s', alarm_length='%s'"
+		dbConn = self._getDatabaseConnection()
+		cur = dbConn.cursor()
+		cur.execute(updateQuery % (debouce_timeout, alarm_length))
+		dbConn.commit()
+		cur.close()
+		dbConn.close()

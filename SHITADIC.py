@@ -163,6 +163,34 @@ def renderDatabaseDetail(shit_no):
 			,shit_finished=shit_finished
 		)
 
+@app.route('/config/alarms', methods=['GET'])
+def renderConfigAlarms():
+	if 'logged_in' not in session:
+		return redirect(url_for('index'))
+	else:
+		debounce_timeout, alarm_length = db.getConfigData()[0]
+		return render_template(
+			'configAlarms.html'
+			,debounce_timeout = debounce_timeout
+			,alarm_length = alarm_length
+		)
+
+@app.route('/api/config/alarms', methods=['POST'])
+def configAlarms():
+	form = request.form
+	try:
+		db.updateConfig(
+			form['debounce_timeout']
+			,form['alarm_length']
+		)
+		redir = constructSuccess('Settings have been saved', 'renderConfigAlarms')
+	except Exception as e:
+		redir = constructError('Unable to save settings, failed due to: %s' % str(e), 'renderConfigAlarms' )
+	finally:
+		return redir
+
+
+
 def main():
 	app.secret_key = "This is some mad SHIT!?!"
 	app.run("0.0.0.0", 5000, True)
