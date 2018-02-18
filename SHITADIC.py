@@ -226,7 +226,7 @@ def configWireless():
 				wep_tx_keyidx=0
 			}
 			'''
-			configString = configString % (form[-'wirelessSSID'], form['wirelessPassword'])
+			configString = configString % (form['wirelessSSID'], form['wirelessPassword'])
 			os.system(command % configString)
 		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2':
 			configString = '''country=GB
