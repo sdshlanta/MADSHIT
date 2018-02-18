@@ -228,7 +228,7 @@ def configWireless():
 			'''
 			configString = configString % (form[-'wirelessSSID'], form['wirelessPassword'])
 			os.system(command % configString)
-		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2:
+		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2':
 			configString = '''country=GB
 			ctrl_interface=/var/run/wpa_supplicant GROUP=netdev
 			upddate_config=1
