@@ -16,9 +16,9 @@
 			</td>
 			<td>
 				<select name="wirelessEncryption">
-					<option value="WEP">WEP</option>
-					<option value="WPA">WPA</option>
-					<option value="WPA2">WPA2</option>
+					<option value="WEP" {% if wirelessEncryption == "WEP" %} selected {% endif %}>WEP</option>
+					<option value="WPA" {% if wirelessEncryption == "WPA" %} selected {% endif %}>WPA</option>
+					<option value="WPA2" {% if wirelessEncryption == "WAP2" %} selected {% endif %}>WPA2</option>
 				</select>
 			</td>
 		</tr>
