@@ -213,7 +213,7 @@ def renderConfigWireless():
 def configWireless():
 	redir = None
 	form = request.form
-	command = "sudo bash -c 'echo \"%s\">>/etc/wpa_supplicant/wpa_supplicant.conf'"
+	command = "sudo bash -c 'echo \"%s\" > /etc/wpa_supplicant/wpa_supplicant.conf'"
 	try:
 		if form['wirelessEncryption'] == 'WEP':
 			configString = '''country=GB
