@@ -158,13 +158,13 @@ class SHITdb(object):
 		rows = [row for row in cur]
 		cur.close()
 		dbConn.close()
-		return rows
+		return rows[0]
 	
-	def updateConfig(self, debouce_timeout, alarm_length):
-		updateQuery = "UPDATE SHITconfig SET debounce_timeout='%s', alarm_length='%s'"
+	def updateConfig(self, debouce_timeout, alarm_length, wireless_ssid, wireless_password, wireless_encryption):
+		updateQuery = "UPDATE SHITconfig SET debounce_timeout='%s', alarm_length='%s', wireless_ssid='%s', wireless_password='%s', wireless_encryption='%s'"
 		dbConn = self._getDatabaseConnection()
 		cur = dbConn.cursor()
-		cur.execute(updateQuery % (debouce_timeout, alarm_length))
+		cur.execute(updateQuery % (debouce_timeout, alarm_length, wireless_ssid, wireless_password, wireless_encryption))
 		dbConn.commit()
 		cur.close()
 		dbConn.close()

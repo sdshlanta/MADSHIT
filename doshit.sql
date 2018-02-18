@@ -26,6 +26,9 @@ INSERT INTO users (user_name, user_passwd, user_type) VALUES ('admin', 'password
 CREATE TABLE SHITconfig (
 	debounce_timeout int(8) UNSIGNED NOT NULL DEFAULT 1
 	,alarm_length int(64) UNSIGNED NOT NULL DEFAULT 5
+	,wireless_ssid varchar(31) NOT NULL DEFAULT 'HeartInformationTransmiter'
+	,wireless_password varchar(63) NOT NULL DEFAULT 'Password1!'
+	,wireless_encryption varchar(16) NOT NULL DEFAULT 'WEP'
 );
 /* setup defaults */
 INSERT INTO SHITconfig () VALUES ();

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, url_for
 import SHITDB
 import argparse
+import os
 
 app = Flask("Alarm Database Interface Connector")
 
@@ -168,7 +169,7 @@ def renderConfigAlarms():
 	if 'logged_in' not in session:
 		return redirect(url_for('index'))
 	else:
-		debounce_timeout, alarm_length = db.getConfigData()[0]
+		debounce_timeout, alarm_length, session['wireless_ssid'], session['wireless_password'], session['wireless_encryption']= db.getConfigData()
 		return render_template(
 			'configAlarms.html'
 			,debounce_timeout = debounce_timeout
@@ -182,14 +183,72 @@ def configAlarms():
 		db.updateConfig(
 			form['debounce_timeout']
 			,form['alarm_length']
+			,session['wireless_ssid']
+			,session['wireless_password']
+			,session['wireless_encryption']
 		)
 		redir = constructSuccess('Settings have been saved', 'renderConfigAlarms')
 	except Exception as e:
 		redir = constructError('Unable to save settings, failed due to: %s' % str(e), 'renderConfigAlarms' )
 	finally:
+		del session['wireless_ssid']
+		del session['wireless_password']
+		del session['wireless_encryption']
 		return redir
 
+@app.route('/config/wireless', methods=['GET'])
+def renderConfigWireless():
+	if 'logged_in' not in session:
+		return redirect(url_for('index'))
+	else:
+		session['debounce_timeout'], session['alarm_length'],  wirelessSSID, wirelessPassword, wirelessEncryption = db.getConfigData()
+		return render_template(
+			'configWireless.html'
+			,wirelessSSID = wirelessSSID
+			,wirelessPassword = wirelessPassword
+			,wirelessEncryption = wirelessEncryption
+		)
 
+@app.route('/api/config/wireless', methods=['POST'])
+def configWireless():
+	redir = None
+	form = request.form
+	command = "sudo bash -c 'echo \"%s\">>/etc/wpa_supplicant/wpa_supplicant.conf'"
+	try:
+		if form['wirelessEncryption'] == 'WEP':
+			configString = '''country=GB
+			ctrl_interface=/var/run/wpa_supplicant
+			upddate_config=1
+			network={
+				ssid=%s
+				key_mgmt=NONE
+				wep_key0=%s
+				wep_tx_keyidx=0
+			}
+			'''
+			configString = configString % (form[-'wirelessSSID'], form['wirelessPassword'])
+			os.system(command % configString)
+		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2:
+			configString = '''country=GB
+			ctrl_interface=/var/run/wpa_supplicant GROUP=netdev
+			upddate_config=1
+			network={
+				ssid=%s
+				psk=%s
+			}'''
+			configString = configString % (form['wirelessSSID'], form['wirelessPassword'])
+			os.system(command % configString)
+		else:
+			redir = constructError('Unknown encryption type', 'renderConfigWireless')
+		if not redir:
+			db.updateConfig(session['debounce_timeout'], session['alarm_length'],  form['wirelessSSID'], form['wirelessPassword'], form['wirelessEncryption'] )
+			redir = constructSuccess('Settings have been saved', 'renderConfigWireless')
+	except Exception as e:
+		redir = constructError('Unable to save settings, failed due to: %s' % str(e), 'renderConfigWireless')
+	finally:
+		del session['debounce_timeout']
+		del session['alarm_length']
+	return redir
 
 def main():
 	app.secret_key = "This is some mad SHIT!?!"

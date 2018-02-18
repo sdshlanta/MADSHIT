@@ -1,0 +1,26 @@
+{% extends "header.html" %}
+{{super()}}
+{% block title %}Config Wireless{% endblock %}
+{% block content %}
+<form action="{{ url_for('configWireless') }}" method="POST">
+	<table>
+		<tr>
+			<th>Wireless SSID</th><th>Wireless Password</th><th>Encryption Type</th>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" value="{{ wirelessSSID }}" name="wirelessSSID">
+			</td>
+			<td>
+				<input type="text" value="{{ wirelessPassword }}" name="wirelessPassword">
+			</td>
+			<td>
+				<select name="wirelessEncryption">
+					<option value="WEP">WEP</option>
+					<option value="WPA">WPA</option>
+					<option value="WPA2">WPA2</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+</form>
