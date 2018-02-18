@@ -213,22 +213,23 @@ def renderConfigWireless():
 def configWireless():
 	redir = None
 	form = request.form
-	command = "sudo bash -c 'echo \"%s\" > /etc/wpa_supplicant/wpa_supplicant.conf'"
 	try:
 		if form['wirelessEncryption'] == 'WEP':
-			configString = '''country=GB
-			ctrl_interface=/var/run/wpa_supplicant
-			upddate_config=1
-			network={
-				ssid=%s
-				key_mgmt=NONE
-				wep_key0=%s
-				wep_tx_keyidx=0
-			}
-			'''
-			configString = configString % (form['wirelessSSID'], form['wirelessPassword'])
-			os.system(command % configString)
+			command = "sudo bash -c 'iwconfig wlan0 essid %s key %s' &"
+			# configString = '''country=GB
+			# ctrl_interface=/var/run/wpa_supplicant
+			# upddate_config=1
+			# network={
+			# 	ssid=%s
+			# 	key_mgmt=NONE
+			# 	wep_key0="%s
+			# 	wep_tx_keyidx=0
+			# }
+			# '''
+			commandToExecute = % (form['wirelessSSID'], form['wirelessPassword'])
+			os.system(commandToExecute)
 		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2':
+			command = 'sudo bash -c "echo \'%s\' > /etc/wpa_supplicant/wpa_supplicant.conf'&"
 			configString = '''country=GB
 			ctrl_interface=/var/run/wpa_supplicant GROUP=netdev
 			upddate_config=1
