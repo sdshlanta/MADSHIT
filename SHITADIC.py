@@ -229,7 +229,7 @@ def configWireless():
 			commandToExecute = command % (form['wirelessSSID'], form['wirelessPassword'])
 			os.system(commandToExecute)
 		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2':
-			command = 'sudo echo \'%s\' > /etc/wpa_supplicant/wpa_supplicant.conf'
+			command = 'sudo bash -c "echo \'%s\' > /etc/wpa_supplicant/wpa_supplicant.conf"'
 			configString = '''country=GB
 			ctrl_interface=/var/run/wpa_supplicant GROUP=netdev
 			upddate_config=1
