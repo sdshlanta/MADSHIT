@@ -238,7 +238,7 @@ def configWireless():
 				psk="%s"
 			}'''
 			configString = configString % (form['wirelessSSID'], form['wirelessPassword'])
-			os.system('echo `whoaim`')
+			os.system('echo `whoami`')
 			os.system(command % configString)
 		else:
 			redir = constructError('Unknown encryption type', 'renderConfigWireless')
