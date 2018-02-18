@@ -234,8 +234,8 @@ def configWireless():
 			ctrl_interface=/var/run/wpa_supplicant GROUP=netdev
 			upddate_config=1
 			network={
-				ssid=%s
-				psk=%s
+				ssid="%s"
+				psk="%s"
 			}'''
 			configString = configString % (form['wirelessSSID'], form['wirelessPassword'])
 			os.system(command % configString)
