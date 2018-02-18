@@ -226,7 +226,7 @@ def configWireless():
 			# 	wep_tx_keyidx=0
 			# }
 			# '''
-			commandToExecute = % (form['wirelessSSID'], form['wirelessPassword'])
+			commandToExecute = command % (form['wirelessSSID'], form['wirelessPassword'])
 			os.system(commandToExecute)
 		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2':
 			command = 'sudo bash -c "echo \'%s\' > /etc/wpa_supplicant/wpa_supplicant.conf'&"
