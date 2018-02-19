@@ -27,88 +27,101 @@ def stopASHIT(shitNo, dbConn):
 
 
 def main():
+	import os
+	import sys
 
-	latestSHITLength = 0
-	# setup pins as input
-	GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
-	# setup pins as output
-	GPIO.setup([2, 3], GPIO.OUT)
-	
-	# create database handaler.
-	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, 
-					   args.databasePassword)
-	
-	# check if configs are overridden, if not set configs
-	configData = db.getConfigData()
-	if not args.debounceTimeout:
-		args.debounceTimeout = configData[0]
-	if not args.testAlertLength:
-		args.testAlertLength = configData[1]
-	
-	print(db.selectASpecficSHIT(1))
-	# setup timer on the test alert so we have a dead timer object going forward also serves as a test of the alarm system.
-	shit_no, shit_type, shit_time, shit_length, shit_finished = db.selectASpecficSHIT(1)[0]
-	latestSHITLength = shit_length
-	aCurrentSHIT = threading.Timer(1, stopASHIT, args=(shit_no, db))
-	startASHIT()
-	aCurrentSHIT.start()
-	if args.lastAlarmNumber > 0:
-		latestSHITNo = args.lastAlarmNumber
-	else:
-		latestSHITNo = db.selectPreviousASHIT()[0][0]
+	pid = str(os.getpid())
+	pidfile = "/tmp/%s.pid" % __name__
 
-	def shitInterrupt(channel):
-		global newPressAllowed
-		global newPressTimer
-		if newPressAllowed:
-			newPressAllowed = False
-			newPressTimer = threading.Timer(args.debounceTimeout, debouncer)
-			db.insertASHIT(aSHITType[str(channel)], args.testAlertLength)
-			newPressTimer.start()
-	# assing intrrupt to pins
-	for pin in map(int, aSHITType.keys()):
-		GPIO.add_event_detect(pin, GPIO.RISING, callback=shitInterrupt)
-	
+	if os.path.isfile(pidfile):
+		print("%s already exists, exiting" % pidfile)
+		sys.exit()
+	with open(pidfile,'w') as fp:
+		fp.write(pid)
 	try:
-		while True:
-			for shit_no, shit_length, shit_type, shit_finished in db.selectPreviousASHIT(limit=10):
-				if shit_no > latestSHITNo:
-					print(shit_no, shit_length, shit_type)
-					if shit_type == 5:
-						if aCurrentSHIT.is_alive():
-							aCurrentSHIT.cancel()
-							stopASHIT(shit_no, db)
+		latestSHITLength = 0
+		# setup pins as input
+		GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+		# setup pins as output
+		GPIO.setup([2, 3], GPIO.OUT)
+		
+		# create database handaler.
+		db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, 
+						args.databasePassword)
+		
+		# check if configs are overridden, if not set configs
+		configData = db.getConfigData()
+		if not args.debounceTimeout:
+			args.debounceTimeout = configData[0]
+		if not args.testAlertLength:
+			args.testAlertLength = configData[1]
+		
+		print(db.selectASpecficSHIT(1))
+		# setup timer on the test alert so we have a dead timer object going forward also serves as a test of the alarm system.
+		shit_no, shit_type, shit_time, shit_length, shit_finished = db.selectASpecficSHIT(1)[0]
+		latestSHITLength = shit_length
+		aCurrentSHIT = threading.Timer(1, stopASHIT, args=(shit_no, db))
+		startASHIT()
+		aCurrentSHIT.start()
+		if args.lastAlarmNumber > 0:
+			latestSHITNo = args.lastAlarmNumber
+		else:
+			latestSHITNo = db.selectPreviousASHIT()[0][0]
+
+		def shitInterrupt(channel):
+			global newPressAllowed
+			global newPressTimer
+			if newPressAllowed:
+				newPressAllowed = False
+				newPressTimer = threading.Timer(args.debounceTimeout, debouncer)
+				db.insertASHIT(aSHITType[str(channel)], args.testAlertLength)
+				newPressTimer.start()
+		# assing intrrupt to pins
+		for pin in map(int, aSHITType.keys()):
+			GPIO.add_event_detect(pin, GPIO.RISING, callback=shitInterrupt)
+		
+		try:
+			while True:
+				for shit_no, shit_length, shit_type, shit_finished in db.selectPreviousASHIT(limit=10):
+					if shit_no > latestSHITNo:
+						print(shit_no, shit_length, shit_type)
+						if shit_type == 5:
+							if aCurrentSHIT.is_alive():
+								aCurrentSHIT.cancel()
+								stopASHIT(shit_no, db)
+								latestSHITNo = shit_no
+
+						elif not aCurrentSHIT.is_alive():
+							print("starting shit")
+							startASHIT()
+							aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
+							aCurrentSHIT.start()
 							latestSHITNo = shit_no
-
-					elif not aCurrentSHIT.is_alive():
-						print("starting shit")
-						startASHIT()
-						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
-						aCurrentSHIT.start()
-						latestSHITNo = shit_no
-						latestSHITLength = int(shit_length)
-						latestSHITStartTime = int(time.time())
-						
-				elif shit_no == latestSHITNo:
-					print("Same shit")
-					if shit_finished == 1:
-						if aCurrentSHIT.is_alive():
-							print("canceling shit")
+							latestSHITLength = int(shit_length)
+							latestSHITStartTime = int(time.time())
+							
+					elif shit_no == latestSHITNo:
+						print("Same shit")
+						if shit_finished == 1:
+							if aCurrentSHIT.is_alive():
+								print("canceling shit")
+								aCurrentSHIT.cancel()
+								stopASHIT(shit_no, db)
+							
+						elif latestSHITLength != shit_length:
+							print("modifying shit time")
 							aCurrentSHIT.cancel()
-							stopASHIT(shit_no, db)
-						
-					elif latestSHITLength != shit_length:
-						print("modifying shit time")
-						aCurrentSHIT.cancel()
-						aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time()))), stopASHIT))
-			time.sleep(1)
-			print("new press allowed: " + str(newPressAllowed))
-			print(newPressTimer)
+							aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time()))), stopASHIT))
+				time.sleep(1)
+				print("new press allowed: " + str(newPressAllowed))
+				print(newPressTimer)
 
-	except KeyboardInterrupt:
-		pass
+		except KeyboardInterrupt:
+			pass
+		finally:
+			GPIO.cleanup()
 	finally:
-		GPIO.cleanup()
+    	os.unlink(pidfile)
 
 if __name__ == '__main__':
 

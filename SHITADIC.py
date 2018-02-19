@@ -249,8 +249,7 @@ def configWireless():
 
 def main():
 	app.secret_key = "This is some mad SHIT!?!"
-	app.run("0.0.0.0", 5000, True)
-	
+	app.run("0.0.0.0", 5000, True)	
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser("Secure Heart Information Transmitter Alternitive Data Connector")
@@ -259,5 +258,20 @@ if __name__ == '__main__':
 	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is dashit", default="dashit")
 	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="Password1!")
 	args = parser.parse_args()
-	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword )
-	main()
+	import os
+	import sys
+
+	pid = str(os.getpid())
+	pidfile = "/tmp/%s.pid" % __name__
+
+	if os.path.isfile(pidfile):
+		print("%s already exists, exiting" % pidfile)
+		sys.exit()
+	with open(pidfile,'w') as fp:
+		fp.write(pid)
+	try:
+		db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword )
+		main()
+	finally:
+		os.unlink(pidfile)
+	
