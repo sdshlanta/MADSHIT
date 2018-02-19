@@ -216,13 +216,13 @@ def configWireless():
 	try:
 		if form['wirelessEncryption'] == 'WEP':
 			command = "sudo bash -c \"echo -n '%s' > /etc/wpa_supplicant/wpa_supplicant.conf\""
-			configString = 'ctrl_interface=/var/run/wpa_supplicant\
-			ctrl_interface_group=wheel\
-			network={\
-				ssid="%s"\
-				scan_ssid=1\
-				key_mgmt=NONE\
-				wep_tx_keyidx=0\
+			configString = 'ctrl_interface=/var/run/wpa_supplicant\n\
+			ctrl_interface_group=wheel\n\
+			network={\n\
+				ssid="%s"\n\
+				scan_ssid=1\n\
+				key_mgmt=NONE\n\
+				wep_tx_keyidx=0\n\
 				wep_key0=%s\
 			}'
 			commandToExecute = command % (configString % (form['wirelessSSID'], form['wirelessPassword']))
