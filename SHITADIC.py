@@ -229,17 +229,12 @@ def configWireless():
 			commandToExecute = command % (form['wirelessSSID'], form['wirelessPassword'])
 			os.system(commandToExecute)
 		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2':
-			command = 'sudo bash -c "echo \'%s\' > /etc/wpa_supplicant/wpa_supplicant.conf"'
-			configString = '''country=GB
-			ctrl_interface=/var/run/wpa_supplicant GROUP=netdev
-			upddate_config=1
-			network={
-				ssid="%s"
-				psk="%s"
-			}'''
-			configString = configString % (form['wirelessSSID'], form['wirelessPassword'])
+			command = 'sudo bash -c "wpa_passphrase %s %s > /etc/wpa_supplicant/wpa_supplicant.conf"'
+			updateConfig = command % (form['wirelessSSID'], form['wirelessPassword'])
 			os.system('echo `whoami`')
-			os.system(command % configString)
+			os.system(updateConfig)
+			os.system('sudo pkill wpa_supplicant')
+			os.system('sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf')
 		else:
 			redir = constructError('Unknown encryption type', 'renderConfigWireless')
 		if not redir:
