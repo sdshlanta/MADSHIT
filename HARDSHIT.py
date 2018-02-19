@@ -118,9 +118,8 @@ def main():
 
 		except KeyboardInterrupt:
 			pass
-		finally:
-			GPIO.cleanup()
 	finally:
+		GPIO.cleanup()		
     	os.unlink(pidfile)
 
 if __name__ == '__main__':
