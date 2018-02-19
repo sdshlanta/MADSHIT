@@ -262,7 +262,7 @@ if __name__ == '__main__':
 	import sys
 
 	pid = str(os.getpid())
-	pidfile = "/tmp/%s.pid" % __name__
+	pidfile = "/tmp/SHITADIC.pid"
 
 	if os.path.isfile(pidfile):
 		print("%s already exists, exiting" % pidfile)

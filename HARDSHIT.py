@@ -31,7 +31,7 @@ def main():
 	import sys
 
 	pid = str(os.getpid())
-	pidfile = "/tmp/%s.pid" % __name__
+	pidfile = "/tmp/HARDSHIT.pid"
 
 	if os.path.isfile(pidfile):
 		print("%s already exists, exiting" % pidfile)
