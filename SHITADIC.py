@@ -215,19 +215,20 @@ def configWireless():
 	form = request.form
 	try:
 		if form['wirelessEncryption'] == 'WEP':
-			command = "sudo bash -c 'iwconfig wlan0 essid %s key %s' &"
-			# configString = '''country=GB
-			# ctrl_interface=/var/run/wpa_supplicant
-			# upddate_config=1
-			# network={
-			# 	ssid=%s
-			# 	key_mgmt=NONE
-			# 	wep_key0="%s
-			# 	wep_tx_keyidx=0
-			# }
-			# '''
-			commandToExecute = command % (form['wirelessSSID'], form['wirelessPassword'])
+			command = "sudo bash -c '%s'"
+			configString = 'ctrl_interface=/var/run/wpa_supplicant\
+			ctrl_interface_group=wheel\
+			network={\
+				ssid="%s"\
+				scan_ssid=1\
+				key_mgmt=NONE\
+				wep_tx_keyidx=0\
+				wep_key0=%s\
+			}'
+			commandToExecute = command % (configString % (form['wirelessSSID'], form['wirelessPassword']))
 			os.system(commandToExecute)
+			os.system('sudo pkill wpa_supplicant')
+			os.system('sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf')
 		elif form['wirelessEncryption'] == 'WPA' or form['wirelessEncryption'] == 'WPA2':
 			command = 'sudo bash -c "wpa_passphrase %s %s > /etc/wpa_supplicant/wpa_supplicant.conf"'
 			updateConfig = command % (form['wirelessSSID'], form['wirelessPassword'])
