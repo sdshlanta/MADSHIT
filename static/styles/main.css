@@ -21,6 +21,12 @@ h2 {
     height: 100px;
 }
 
+#loginForm {
+	text-align: right;
+	display: grid;
+    height: 100px;
+}
+
 td {
 	text-align: center;
 }
