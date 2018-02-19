@@ -219,7 +219,7 @@ def configWireless():
 			configString = '''ctrl_interface=/var/run/wpa_supplicant\n
 			ctrl_interface_group=wheel
 			network={
-				ssid="%s"
+				ssid=\\"%s\\"
 				scan_ssid=1
 				key_mgmt=NONE
 				wep_tx_keyidx=0
