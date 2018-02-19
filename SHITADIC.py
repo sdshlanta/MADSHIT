@@ -93,10 +93,10 @@ def renderUserInfo(username):
 		return constructError('Unable to find user %s' % username, 'index')
 	else:
 		userNo, username, password, isAdmin = rows[0]
-		if 'admin' in session or (session['username'] == username):
-			return render_template('userInfo.html', userNo = userNo, username=username, password=password, isAdmin=isAdmin )			
-		else:
-			return render_template('userInfo.html', userNo = userNo, username=username, isAdmin=isAdmin )
+		if 'username' in sessoin:
+			if 'admin' in session or (session['username'] == username):
+				return render_template('userInfo.html', userNo = userNo, username=username, password=password, isAdmin=isAdmin )			
+		return render_template('userInfo.html', userNo = userNo, username=username, isAdmin=isAdmin )
 
 
 @app.route('/users', methods = ['GET'])
