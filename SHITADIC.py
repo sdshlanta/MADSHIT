@@ -216,8 +216,7 @@ def configWireless():
 	try:
 		if form['wirelessEncryption'] == 'WEP':
 			command = "sudo bash -c \"echo '%s' > /etc/wpa_supplicant/wpa_supplicant.conf\""
-			configString = '''ctrl_interface=/var/run/wpa_supplicant\n
-			ctrl_interface_group=wheel
+			configString = '''ctrl_interface=/var/run/wpa_supplicant GROUP=netdev\n
 			network={
 				ssid=\\"%s\\"
 				scan_ssid=1
