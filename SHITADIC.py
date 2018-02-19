@@ -258,20 +258,6 @@ if __name__ == '__main__':
 	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is dashit", default="dashit")
 	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="Password1!")
 	args = parser.parse_args()
-	import os
-	import sys
-
-	pid = str(os.getpid())
-	pidfile = "/tmp/SHITADIC.pid"
-
-	if os.path.isfile(pidfile):
-		print("%s already exists, exiting" % pidfile)
-		sys.exit()
-	with open(pidfile,'w') as fp:
-		fp.write(pid)
-	try:
-		db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword )
-		main()
-	finally:
-		os.unlink(pidfile)
+	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword )
+	main()
 	
