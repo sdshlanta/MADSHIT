@@ -66,6 +66,7 @@ def main():
 			newPressTimer = threading.Timer(args.debounceTimeout, debouncer)
 			db.insertASHIT(aSHITType[str(channel)], args.testAlertLength)
 			newPressTimer.start()
+	
 	# assing intrrupt to pins
 	for pin in map(int, aSHITType.keys()):
 		GPIO.add_event_detect(pin, GPIO.RISING, callback=shitInterrupt)
@@ -73,37 +74,52 @@ def main():
 	try:
 		while True:
 			for shit_no, shit_length, shit_type, shit_finished in db.selectPreviousASHIT(limit=10):
+				# If this is a new alarm (or at least more recent than the current one)
 				if shit_no > latestSHITNo:
 					print(shit_no, shit_length, shit_type)
+					# Legacy code that uses the old method for canceling an alarm
 					if shit_type == 5:
 						if aCurrentSHIT.is_alive():
 							aCurrentSHIT.cancel()
 							stopASHIT(shit_no, db)
 							latestSHITNo = shit_no
-
+					# Starts new alarms
 					elif not aCurrentSHIT.is_alive():
-						print("starting shit")
-						startASHIT()
-						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
-						aCurrentSHIT.start()
-						latestSHITNo = shit_no
-						latestSHITLength = int(shit_length)
-						latestSHITStartTime = int(time.time())
-						
+						if not shit_finished:
+							print("starting shit")
+							startASHIT()
+							aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
+							aCurrentSHIT.start()
+							latestSHITNo = shit_no
+							latestSHITLength = int(shit_length)
+							latestSHITStartTime = int(time.time())
+				# Handel changes to the curent alarm 
 				elif shit_no == latestSHITNo:
 					print("Same shit")
+					# End the alram early if it is manually set
 					if shit_finished == 1:
 						if aCurrentSHIT.is_alive():
 							print("canceling shit")
 							aCurrentSHIT.cancel()
 							stopASHIT(shit_no, db)
-						
+					# Change the length of the current alarm
 					elif latestSHITLength != shit_length:
 						print("modifying shit time")
 						aCurrentSHIT.cancel()
 						aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time()))), stopASHIT))
+				# Handel alarms manually mared as unfinished
+				else:
+					if not shit_finished:
+						if not aCurrentSHIT.is_alive():
+							startASHIT()
+							aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
+							aCurrentSHIT.start()
+							latestSHITNo = shit_no
+							latestSHITLength = int(shit_length)
+							latestSHITStartTime = int(time.time())
+
 			time.sleep(1)
-			print("new press allowed: " + str(newPressAllowed))
+			print("new press allowed: %s" % str(newPressAllowed))
 			print(newPressTimer)
 
 	except KeyboardInterrupt:
