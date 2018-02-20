@@ -73,7 +73,7 @@ def main():
 	
 	try:
 		while True:
-			for shit_no, shit_length, shit_time, shit_type, shit_finished in db.selectAllASHIT():
+			for shit_no, shit_type, shit_time, shit_length, shit_finished in db.selectAllASHIT():
 				# If this is a new alarm (or at least more recent than the current one)
 				if shit_no > latestSHITNo:
 					print(shit_no, shit_length, shit_type)
@@ -85,6 +85,8 @@ def main():
 							latestSHITNo = shit_no
 					# Starts new alarms
 					elif not aCurrentSHIT.is_alive():
+						print('notAlive')
+						print('')
 						if not shit_finished:
 							print("starting shit")
 							startASHIT()
