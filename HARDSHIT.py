@@ -73,7 +73,7 @@ def main():
 	
 	try:
 		while True:
-			for shit_no, shit_length, shit_type, shit_finished in db.selectPreviousASHIT(limit=10):
+			for shit_no, shit_length, shit_type, shit_finished in db.selectAllASHIT():
 				# If this is a new alarm (or at least more recent than the current one)
 				if shit_no > latestSHITNo:
 					print(shit_no, shit_length, shit_type)
