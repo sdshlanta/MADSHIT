@@ -1,3 +1,4 @@
+import time
 import mysql.connector
 
 class SHITdb(object):
@@ -7,10 +8,15 @@ class SHITdb(object):
 		self.username = username
 		self.password = password
 	
-	def _getDatabaseConnection(self):
-		dbConn = mysql.connector.connect(user=self.username, password=self.password,
-										host=self.host,
-										database=self.database)
+	def _getDatabaseConnection(self, retries=10):
+		for x in range(retries):
+			try:
+				dbConn = mysql.connector.connect(user=self.username, password=self.password,
+												host=self.host,
+												database=self.database)
+				break
+			except mysql.connector.errors.InterfaceError:
+				time.sleep(1)
 		return dbConn
 
 	def insertASHIT(self, shit_type, shit_length, debug = False):
