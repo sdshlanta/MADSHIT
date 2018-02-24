@@ -107,16 +107,15 @@ def main():
 						print("modifying shit time")
 						aCurrentSHIT.cancel()
 						aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time())))), stopASHIT)
-				# Handel alarms manually mared as unfinished
-				else:
-					if not shit_finished:
-						if not aCurrentSHIT.is_alive():
-							startASHIT()
-							aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
-							aCurrentSHIT.start()
-							latestSHITNo = shit_no
-							latestSHITLength = int(shit_length)
-							latestSHITStartTime = int(time.time())
+				# Handel alarms manually marked as unfinished
+				if not shit_finished:
+					if not aCurrentSHIT.is_alive():
+						startASHIT()
+						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
+						aCurrentSHIT.start()
+						latestSHITNo = shit_no
+						latestSHITLength = int(shit_length)
+						latestSHITStartTime = int(time.time())
 
 			time.sleep(1)
 			print("new press allowed: %s" % str(newPressAllowed))
