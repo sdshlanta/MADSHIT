@@ -53,6 +53,7 @@ def main():
 	aCurrentSHIT = threading.Timer(1, stopASHIT, args=(shit_no, db))
 	startASHIT()
 	aCurrentSHIT.start()
+	latestSHITStartTime  = int(time.time())
 	if args.lastAlarmNumber > 0:
 		latestSHITNo = args.lastAlarmNumber
 	else:
