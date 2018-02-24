@@ -10,6 +10,8 @@ GPIO.setmode(GPIO.BCM)
 aSHITType = {}
 newPressAllowed = True
 newPressTimer = None
+# debounceTimeout = 0
+# testAlertLength = 0
 
 def debouncer():
 	global newPressAllowed
@@ -28,7 +30,8 @@ def stopASHIT(shitNo, dbConn):
 
 
 def main():
-
+	# global debounceTimeout
+	# global testAlertLength
 	latestSHITLength = 0
 	# setup pins as input
 	GPIO.setup(list(map(int, aSHITType.keys())), GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -41,10 +44,8 @@ def main():
 	
 	# check if configs are overridden, if not set configs
 	configData = db.getConfigData()
-	if not args.debounceTimeout:
-		args.debounceTimeout = configData[0]
-	if not args.testAlertLength:
-		args.testAlertLength = configData[1]
+	debounceTimeout = configData[0]
+	testAlertLength = configData[1]
 	
 	print(db.selectASpecficSHIT(1))
 	# setup timer on the test alert so we have a dead timer object going forward also serves as a test of the alarm system.
@@ -64,8 +65,8 @@ def main():
 		global newPressTimer
 		if newPressAllowed:
 			newPressAllowed = False
-			newPressTimer = threading.Timer(args.debounceTimeout, debouncer)
-			db.insertASHIT(aSHITType[str(channel)], args.testAlertLength)
+			newPressTimer = threading.Timer(debounceTimeout, debouncer)
+			db.insertASHIT(aSHITType[str(channel)], testAlertLength)
 			newPressTimer.start()
 	
 	# assing intrrupt to pins
@@ -74,6 +75,9 @@ def main():
 	
 	try:
 		while True:
+			configData = db.getConfigData()
+			debounceTimeout = configData[0]
+			testAlertLength = configData[1]
 			for shit_no, shit_type, shit_time, shit_length, shit_finished in db.selectAllASHIT():
 				# If this is a new alarm (or at least more recent than the current one)
 				if shit_no > latestSHITNo:
@@ -134,10 +138,8 @@ if __name__ == '__main__':
 	parser.add_argument("-H", "--databaseHost", type=str, help="The host the database is running on.  Default is 127.0.0.1", default="127.0.0.1")
 	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is dashit", default="dashit")
 	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is Password1!", default="Password1!")
-	parser.add_argument("-l", "--testAlertLength", type=int, help="The amount of time a test alert should last", default=0)
 	parser.add_argument("-a", "--lastAlarmNumber", type=int, help="The set the inital value for the last alarm", default = -1)
 	parser.add_argument('-p', '--pinMap', type=lambda x: json.load(open(x)), help="Specifiy the pin mapping file for pin to alarm mapping. Default filename is pinMap.json", default=json.load(open('pinMap.json')))
-	parser.add_argument('-d', '--debounceTimeout', type=float, help='The number of seconds to wait before registering another button press, default is 1', default = 0)
 	args = parser.parse_args()
 	aSHITType = args.pinMap
 	main()
