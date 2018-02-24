@@ -85,8 +85,6 @@ def main():
 							latestSHITNo = shit_no
 					# Starts new alarms
 					elif not aCurrentSHIT.is_alive():
-						print('notAlive')
-						print('')
 						if not shit_finished:
 							print("starting shit")
 							startASHIT()
@@ -108,7 +106,7 @@ def main():
 					elif latestSHITLength != shit_length:
 						print("modifying shit time")
 						aCurrentSHIT.cancel()
-						aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time()))), stopASHIT))
+						aCurrentSHIT = threading.Timer(float(abs(shit_length - int(latestSHITStartTime - int(time.time())))), stopASHIT)
 				# Handel alarms manually mared as unfinished
 				else:
 					if not shit_finished:
