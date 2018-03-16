@@ -266,14 +266,19 @@ def configWireless():
 @app.after_request
 def afterRequest(response):
 	if response.status_code != 500:
+		if request.form:
+			data = request.form
+		else:
+			data = ''
 		ts = strftime('[%Y-%b-%d %H:%M]')
-		logger.info('%s %s %s %s %s %s',
+		logger.info('%s %s %s %s %s %s %s',
 			ts,
 			request.remote_addr,
 			request.method,
 			request.scheme,
 			request.url,
-			response.status)
+			response.status,
+			data)
 	return response
 
 @app.errorhandler(Exception)
@@ -290,10 +295,7 @@ def logExceptions(e):
 	return "Internal Server Error", 500
 
 def main():
-	handler = RotatingFileHandler(args.logFile, maxBytes=args.logSize, backupCount=args.logBackups)
-	logger = logging.getLogger(__name__)
-	logger.setLevel(logging.INFO)
-	logger.addHandler(handler)
+
 	app.secret_key = readKey(args.secretKey)
 	app.run("0.0.0.0", 5000, True)	
 	
@@ -305,9 +307,16 @@ if __name__ == '__main__':
 	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="Password1!")
 	parser.add_argument("-L", "--logFile", type=str, help="The path to a file were you would like output logged.  By default a new log file will be created once the first reaches 100kB.  Default is SHITADIC.log", default="SHITADIC.log") 
 	parser.add_argument("-S", "--logSize", type=int, help="The maximum size of the log file in bytes.  If this is set to 0 all data will be logged to the same file  Default is 100000", default=100000)
-	parser.add_argument("-B", "--logBackups", type=int, help"The maximum number of old log files to to keep.  Default is 5", default=5)
+	parser.add_argument("-B", "--logBackups", type=int, help="The maximum number of old log files to to keep.  Default is 5", default=5)
 	parser.add_argument("-s", "--secretKey", type=str, help="Path to file containing 24 random bytes to be used as the secret key", default="This is some mad SHIT!?!")
 	args = parser.parse_args()
 	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword )
+		
+
+	handler = RotatingFileHandler(args.logFile, maxBytes=args.logSize, backupCount=args.logBackups)
+	logger = logging.getLogger(__name__)
+	logger.setLevel(logging.INFO)
+	logger.addHandler(handler)
+
 	main()
 	
