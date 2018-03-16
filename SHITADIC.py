@@ -1,8 +1,12 @@
 #!/usr/bin/python
 from flask import Flask, render_template, session, request, redirect, url_for
+from logging.handlers import RotatingFileHandler
+from time import strftime
 import SHITDB
 import argparse
 import os
+import logging
+import traceback
 
 app = Flask("Alarm Database Interface Connector")
 
@@ -15,6 +19,17 @@ def constructSuccess(success, returnLocation):
 	session['success'] = success
 	session['returnURL'] = url_for(returnLocation)
 	return redirect(url_for('success'))
+
+def readKey(path):
+	if "This is some mad SHIT!?!" == path:
+		return path
+	try:
+		with open(path, 'r') as fp:
+			key = fp.read()
+		return key
+	except IOError:
+		logger.warning('Unable to access key file at "%s", using default key instead.', path)
+		return "This is some mad SHIT!?!"
 
 @app.route('/',methods=['GET', 'POST'])
 def index():
@@ -248,16 +263,50 @@ def configWireless():
 		del session['alarm_length']
 	return redir
 
-def main():
-	app.secret_key = "This is some mad SHIT!?!"
-	app.run("0.0.0.0", 5000, True)	
+@app.after_request
+def afterRequest(response):
+	if response.status_code != 500:
+		ts = strftime('[%Y-%b-%d %H:%M]')
+		logger.info('%s %s %s %s %s %s',
+			ts,
+			request.remote_addr,
+			request.method,
+			request.scheme,
+			request.url,
+			response.status)
+	return response
 
+@app.errorhandler(Exception)
+def logExceptions(e):
+	ts = strftime('[%Y-%b-%d %H:%M]')
+	tb = traceback.format_exc()
+	logger.error('%s %s %s %s %s 5xx INTERNAL SERVER ERROR\n%s',
+		ts,
+		request.remote_addr,
+		request.method,
+		request.scheme,
+		request.url,
+		tb)
+	return "Internal Server Error", 500
+
+def main():
+	handler = RotatingFileHandler(args.logFile, maxBytes=args.logSize, backupCount=args.logBackups)
+	logger = logging.getLogger(__name__)
+	logger.setLevel(logging.INFO)
+	logger.addHandler(handler)
+	app.secret_key = readKey(args.secretKey)
+	app.run("0.0.0.0", 5000, True)	
+	
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser("Secure Heart Information Transmitter Alternitive Data Connector")
+	parser = argparse.ArgumentParser("Secure Heart Information Transmitter Alarm Database Interface Connector")
 	parser.add_argument("-N", "--databaseName", type=str, help="Name of the database used by the Secure Heart Information Transmitter. Default is 'doshit'.", default="doshit")
 	parser.add_argument("-H", "--databaseHost", type=str, help="The host the database is running on.  Default is 127.0.0.1", default="127.0.0.1")
 	parser.add_argument("-U", "--databaseUsername", type=str, help="Username to be used for the database connection. Default is dashit", default="dashit")
 	parser.add_argument("-P", "--databasePassword", type=str, help="Password to be used for the database connection. Default is blank", default="Password1!")
+	parser.add_argument("-L", "--logFile", type=str, help="The path to a file were you would like output logged.  By default a new log file will be created once the first reaches 100kB.  Default is SHITADIC.log", default="SHITADIC.log") 
+	parser.add_argument("-S", "--logSize", type=int, help="The maximum size of the log file in bytes.  If this is set to 0 all data will be logged to the same file  Default is 100000", default=100000)
+	parser.add_argument("-B", "--logBackups", type=int, help"The maximum number of old log files to to keep.  Default is 5", default=5)
+	parser.add_argument("-s", "--secretKey", type=str, help="Path to file containing 24 random bytes to be used as the secret key", default="This is some mad SHIT!?!")
 	args = parser.parse_args()
 	db = SHITDB.SHITdb(args.databaseHost, args.databaseName, args.databaseUsername, args.databasePassword )
 	main()
