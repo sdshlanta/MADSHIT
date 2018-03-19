@@ -4,18 +4,32 @@
 {% block content %}
 {% if session.logged_in %}
 	{% if session.admin %}
-		<form method="POST" action="{{ url_for('addUser') }}" id="addUser">
-			<label for="username">Username</label>
-			<input type="text" name="username" id="username">
-			<label for="password">Password</label>
-			<input type="password" name="password" id="password">
-			<label for="isAdmin">Is this an administrator?</label>
-			<label for="isAdmin">User</label>
-			<input type="radio" name="isAdmin" value="user" >
-			<label for="isAdmin">Admin</label>
-			<input type="radio" name="isAdmin" value="admin">
-			<button type="submit">Create User</button>
-		</form>
+		<table>
+			<form method="POST" action="{{ url_for('addUser') }}" id="addUser">
+				<tr>
+					<th><label for="username">Username</label></th>
+					<td><input type="text" name="username" id="username"></td>
+				</tr>
+				<tr>
+					<th><label for="password">Password</label></th>
+					<td><input type="password" name="password" id="password"></td>
+				</tr>
+				<tr>
+					<th><label for="isAdmin">Is this an administrator?</label></th>
+				</tr>
+				<tr>
+					<th><label for="isAdmin">User</label></th>
+					<td><input type="radio" name="isAdmin" value="user" ></td>
+				</tr>
+				<tr>
+					<th><label for="isAdmin">Admin</label></th>
+					<td><input type="radio" name="isAdmin" value="admin"></td>
+				</tr>
+				<tr>
+					<td><button type="submit">Create User</button></td>
+				</tr>
+			</form>
+		</table>
 	{% else %}
 		<p>
 			Admin Only, sorry {{ session.username }},
