@@ -70,13 +70,13 @@ def main():
 		if newPressAllowed:
 			newPressAllowed = False
 			newPressTimer = threading.Timer(debounceTimeout, debouncer)
+			newPressTimer.start()
 			if aSHITType[str(channel)] == '4':
-				db.insertASHIT(aSHITType['2'], 2)
-				db.insertASHIT(aSHITType['3'], 2)
-				db.insertASHIT(aSHITType['1'], 2)
+				db.insertASHIT('2', 2)
+				db.insertASHIT('3', 2)
+				db.insertASHIT('1', 2)
 			else:
 				db.insertASHIT(aSHITType[str(channel)], testAlertLength)
-			newPressTimer.start()
 	
 	# assing intrrupt to pins
 	for pin in map(int, aSHITType.keys()):
