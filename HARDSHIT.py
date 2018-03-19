@@ -18,7 +18,7 @@ def debouncer():
 	newPressAllowed = True
 
 def startASHIT(shitType):
-	print("Enabled alarm")
+	print("Enabled alarm type %s" % shitType)
 	if shitType == '2' or shitType == '1':
 		GPIO.output(2, GPIO.HIGH)
 	if shitType == '3' or shitType == '1':
