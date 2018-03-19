@@ -70,7 +70,7 @@ def main():
 		if newPressAllowed:
 			newPressAllowed = False
 			newPressTimer = threading.Timer(debounceTimeout, debouncer)
-			if aSHITtYPE[str(channel)] == '4':
+			if aSHITType[str(channel)] == '4':
 				db.insertASHIT(aSHITType['2'], 2)
 				db.insertASHIT(aSHITType['3'], 2)
 				db.insertASHIT(aSHITType['1'], 2)
