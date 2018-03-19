@@ -19,6 +19,8 @@ def debouncer():
 
 def startASHIT(shitType):
 	print("Enabled alarm type %s" % shitType)
+	print(shitType == '1')
+	print(type(shitType))
 	if shitType == '2' or shitType == '1':
 		print('2 high')
 		GPIO.output(2, GPIO.HIGH)
