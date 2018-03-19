@@ -17,10 +17,12 @@ def debouncer():
 	global newPressAllowed
 	newPressAllowed = True
 
-def startASHIT():
+def startASHIT(shitType):
 	print("Enabled alarm")
-	GPIO.output(2, GPIO.HIGH)
-	GPIO.output(3, GPIO.HIGH)
+	if shitType == '2' or shitType == '1':
+		GPIO.output(2, GPIO.HIGH)
+	if shitType == '3' or shitType == '1':
+		GPIO.output(3, GPIO.HIGH)
 
 def stopASHIT(shitNo, dbConn):
 	print("Disabled alarm")
@@ -52,7 +54,7 @@ def main():
 	shit_no, shit_type, shit_time, shit_length, shit_finished = db.selectASpecficSHIT(1)[0]
 	latestSHITLength = shit_length
 	aCurrentSHIT = threading.Timer(1, stopASHIT, args=(shit_no, db))
-	startASHIT()
+	startASHIT(shit_type)
 	aCurrentSHIT.start()
 	latestSHITStartTime  = int(time.time())
 	if args.lastAlarmNumber > 0:
@@ -66,7 +68,11 @@ def main():
 		if newPressAllowed:
 			newPressAllowed = False
 			newPressTimer = threading.Timer(debounceTimeout, debouncer)
-			db.insertASHIT(aSHITType[str(channel)], testAlertLength)
+				db.insertASHIT(aSHITType['2'], 2)
+				db.insertASHIT(aSHITType['3'], 2)
+				db.insertASHIT(aSHITType['1'], 2)
+			else:
+				db.insertASHIT(aSHITType[str(channel)], testAlertLength)
 			newPressTimer.start()
 	
 	# assing intrrupt to pins
@@ -92,7 +98,7 @@ def main():
 					elif not aCurrentSHIT.is_alive():
 						if not shit_finished:
 							print("starting shit")
-							startASHIT()
+							startASHIT(shit_type)
 							aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
 							aCurrentSHIT.start()
 							latestSHITNo = shit_no
@@ -115,7 +121,7 @@ def main():
 				# Handel alarms manually marked as unfinished
 				if not shit_finished:
 					if not aCurrentSHIT.is_alive():
-						startASHIT()
+						startASHIT(shit_type)
 						aCurrentSHIT = threading.Timer(float(shit_length), stopASHIT, args=(shit_no, db))
 						aCurrentSHIT.start()
 						latestSHITNo = shit_no
